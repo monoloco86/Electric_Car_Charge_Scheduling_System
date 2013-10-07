@@ -1,0 +1,26 @@
+import jade.core.Agent;
+public class SchedulerClass extends Agent{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6282281008361825280L;
+	private Integer carLimit;
+	private Integer numberOfCars;
+	public double chargeRate;
+	public CarClass whoToCharge(){
+		
+		return null;
+	}
+	public void setNumberOfCars(){
+		numberOfCars = 3;
+	}
+	public boolean isTherePower(double neededPower){
+		
+		return false;
+	}
+	public boolean isThereSlots(){
+		
+		return false;
+	}
+}
