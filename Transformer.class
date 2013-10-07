@@ -1,0 +1,23 @@
+import jade.core.Agent;
+public class TransformerClass extends Agent{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1728066903430433442L;
+	private double limit;
+	private double powerLevel;
+	private double output;
+	public double getOutput(){
+		return 0;
+	}
+	public double getAvailablePower(){
+		return 0;
+	}
+	public double getLimit(){
+		return 0;
+	}
+	public void charging(double chargeRate){
+		
+	}
+}
