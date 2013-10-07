@@ -1,0 +1,59 @@
+import jade.core.Agent;
+
+import java.util.Random;
+public class CarClass extends Agent {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2464193006954966661L;
+	Random randomGenerator = new Random();
+	private Integer charge;
+	private Integer chargeRate;
+	public Integer timeTillUse;
+	private Integer maxCharge;
+	private boolean fullyCharged;
+	public Integer time;
+	private Integer neededCharge;
+	public double getNeededCharge(){
+		neededCharge = maxCharge - charge;
+		return neededCharge;
+	}
+	public void setTimeTillUse(){
+		timeTillUse = randomGenerator.nextInt(10);
+		System.out.println(getLocalName()+ "'s time till use is:" +timeTillUse);
+	}
+	public void setCharge(){
+		charge = randomGenerator.nextInt(maxCharge);
+		System.out.print(getLocalName()+"'s is charge at: ");
+		System.out.print(charge);
+		System.out.println(" ");
+	}
+	public boolean isCharged(){
+		if (charge == maxCharge){		
+		return fullyCharged = true;
+		}else return fullyCharged = false;
+	}
+	public void chargeCar(Integer chargeSpeed){
+		while (timeTillUse != 0 && fullyCharged == false){
+			System.out.println("Time till use = "+timeTillUse);
+			if (maxCharge <= charge)
+				System.out.println(getLocalName()+" is fully charged!");
+			else{
+			charge = charge + chargeSpeed;
+			System.out.println(getLocalName()+"'s charge is at:"+ charge);
+			}
+			isCharged();
+			timeTillUse --;
+		}
+	}
+	protected void setup()
+	{
+		System.out.println("Starting up-"+ getLocalName());
+		maxCharge = 100;
+		chargeRate = 30;
+		setCharge();
+		setTimeTillUse();
+		chargeCar(chargeRate);
+	}
+}
