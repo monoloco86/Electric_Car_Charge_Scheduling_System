@@ -148,6 +148,11 @@ public class CarGui extends JFrame implements ActionListener,
             }
 
         }
+        else if (ae.getSource() == cancel && status != IN_LINE) {
+            status = IN_PROCESS;
+            cancel.setEnabled(false);
+            msg.setText("Operation canceled!");
+         }
     }
 
     @Override
@@ -160,7 +165,7 @@ public class CarGui extends JFrame implements ActionListener,
         // --------------------------
 
         Toolkit.getDefaultToolkit().beep();
-        slotPos.setText("Slot position " + s);
+        msg.setText(s);
     }
 
     void shutDown() {
@@ -176,7 +181,7 @@ public class CarGui extends JFrame implements ActionListener,
     }
 
     public void alertResponse(String s) {
-        msg.setText(s.toString());
+        slotPos.setText("Slot position " + s.toString());
     }
 
     public void resetStatus() {

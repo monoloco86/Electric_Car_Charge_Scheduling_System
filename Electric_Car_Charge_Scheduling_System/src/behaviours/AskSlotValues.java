@@ -14,7 +14,6 @@ public class AskSlotValues extends OneShotBehaviour {
         
     @Override
     public void action() {
-    	
         setDataStore(super.getDataStore());
         ServiceDescription serviceDescription = new ServiceDescription();
         serviceDescription.setType("CarAgent");

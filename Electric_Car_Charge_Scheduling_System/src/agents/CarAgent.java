@@ -75,16 +75,31 @@ public class CarAgent extends GuiAgent {
         myGui = new CarGui(this, (Integer) this.ds.get("slotValue"));
         myGui.setVisible(true);
 
-        super.addBehaviour(new CyclicBehaviour(this) {         
-            
+        super.addBehaviour(new CyclicBehaviour(this) {
+
             private static final long serialVersionUID = -5221452177252946977L;
 
             public void action() {
                 ACLMessage msg = receive();
                 if (msg != null) {
                     if (!msg.getSender().equals(getAID()))
-                        if (msg.getContent().contains("i need to charge")){
+                        if (msg.getContent().contains("i need to charge")) {
                             System.out.println(getLocalName() + " is changing");
+                        }
+                        else if (msg.getContent().contains("what are your slot values")) {
+                            System.out.println(super.myAgent.getLocalName()
+                                    + ": MESSAGE RECEIVED: "
+                                    + msg.getContent() + " ---- From: "
+                                    + msg.getSender().getLocalName());
+
+                            Integer slotValue = Integer.parseInt(ds.get("slotValue").toString());
+                            ACLMessage reply = msg.createReply();
+                            reply.setPerformative(ACLMessage.INFORM);
+                            if (slotValue != null)
+                                reply.setContent("my slot value is " + slotValue);
+                            else
+                                reply.setContent("slotValue not set");
+                            super.myAgent.send(reply);
                         }
                 }
                 else

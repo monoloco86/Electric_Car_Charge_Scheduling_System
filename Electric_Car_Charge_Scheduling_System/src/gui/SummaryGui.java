@@ -42,7 +42,7 @@ public class SummaryGui extends JFrame implements ActionListener,
     private JList acList;
     private JLabel slotPos;
     private JTable opTable;
-    private JButton ok, cancel, quit;
+    private JButton update, cancel, quit;
 
     private SummaryAgent myAgent;
 
@@ -71,34 +71,17 @@ public class SummaryGui extends JFrame implements ActionListener,
 
         JPanel p = new JPanel();
         p.setLayout(new BorderLayout(0, 0));
-        p.add(slotPos = new JLabel("Slot position "), BorderLayout.NORTH);
+        p.add(slotPos = new JLabel("Slot positions"), BorderLayout.NORTH);
 
-        panel.add(p, BorderLayout.CENTER);
-
-        JPanel p1 = new JPanel();
-        p1.setLayout(new BorderLayout(0, 0));
-        p1.add(new JLabel("Time Needed"), BorderLayout.NORTH);
-        p1.add(timeNeeded = new JTextField(8));
-
-        panel.add(p1, BorderLayout.SOUTH);
-        panel = new JPanel();
-
-        base.add(panel, BorderLayout.EAST);
-
-        panel.setLayout(new BorderLayout(0, 10));
-        pane = new JPanel();
-        pane.setLayout(new BorderLayout(0, 0));
-        pane.add(new JLabel("Time Till Use"), BorderLayout.NORTH);
-        pane.add(timeTillUse = new JTextField(8));
         panel.add(pane, BorderLayout.SOUTH);
 
         pane = new JPanel();
-        panel.add(pane, BorderLayout.NORTH);
-        pane.setBorder(new EmptyBorder(0, 0, 130, 0));
-        pane.setLayout(new GridLayout(3, 1, 0, 5));
-        pane.add(ok = new JButton("OK"));
-        ok.setToolTipText("Submit operation");
-        ok.addActionListener(this);
+        panel.add(pane, BorderLayout.EAST);
+        pane.setBorder(new EmptyBorder(100, 50, 100, 50));
+        pane.setLayout(new GridLayout(1, 3));
+        pane.add(update = new JButton("Update"));
+        update.setToolTipText("Submit operation");
+        update.addActionListener(this);
         pane.add(cancel = new JButton("Cancel"));
         cancel.setToolTipText("Submit operation");
         cancel.setEnabled(false);
@@ -124,29 +107,10 @@ public class SummaryGui extends JFrame implements ActionListener,
         if (ae.getSource() == quit) {
             shutDown();
         }
-        else if (ae.getSource() == ok) {
-            if (timeTillUse.getText().length() == 0) {
-                alertInfo("Enter an amount");
-                timeTillUse.requestFocus();
-                return;
-            }
-            else if (timeNeeded.getText().length() == 0) {
-                alertInfo("Enter an amount");
-                timeNeeded.requestFocus();
-                return;
-            }
-            else if (timeTillUse.getText().matches("[0-9]+")
-                    && timeNeeded.getText().matches("[0-9]+")) {
-                GuiEvent ge = new GuiEvent(this, 55);
-                ge.addParameter(new Integer(timeNeeded.getText()));
-                ge.addParameter(new Integer(timeTillUse.getText()));
-                myAgent.postGuiEvent(ge);
-            }
-            else {
-                alertInfo("Enter numbers only");
-                return;
-            }
-
+        else if (ae.getSource() == update) {
+            alertInfo("Update slot list");
+            GuiEvent ge = new GuiEvent(this, 55);
+            myAgent.postGuiEvent(ge);
         }
     }
 
@@ -160,7 +124,7 @@ public class SummaryGui extends JFrame implements ActionListener,
         // --------------------------
 
         Toolkit.getDefaultToolkit().beep();
-        slotPos.setText("Slot position " + s);
+        msg.setText(s);
     }
 
     void shutDown() {
@@ -176,7 +140,7 @@ public class SummaryGui extends JFrame implements ActionListener,
     }
 
     public void alertResponse(String s) {
-        msg.setText(s.toString());
+        slotPos.setText(s.toString());
     }
 
     public void resetStatus() {

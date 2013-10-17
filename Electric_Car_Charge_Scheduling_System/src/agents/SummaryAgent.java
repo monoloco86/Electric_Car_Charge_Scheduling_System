@@ -33,6 +33,7 @@ public class SummaryAgent extends GuiAgent {
     static final int WAIT = -1;
     static final int QUIT = 0;
     private int command = WAIT;
+    Integer slotInt;
 
     SequentialBehaviour summarySuperBehaviour = new SequentialBehaviour();
     HashMap<String, Integer> hm;
@@ -70,7 +71,9 @@ public class SummaryAgent extends GuiAgent {
                 ACLMessage msg = receive();
                 if (msg != null) {
                     if (msg.getContent().contains("my slot value is")) {
-                        ds.put(msg.getSender(), Integer.parseInt(msg.getContent().substring(msg.getContent().lastIndexOf(" ") + 1)));
+                        slotInt = Integer.parseInt(msg.getContent().substring(msg.getContent().lastIndexOf(" ") + 1));
+                        System.out.println(msg.getSender() + " has a slot value of " + slotInt);
+                        ds.put(msg.getSender(), slotInt);
                     }
                 }
                 else
@@ -87,11 +90,11 @@ public class SummaryAgent extends GuiAgent {
             System.exit(0);
         }
         else if (command == 55) {
-            sendInfo();
+            updateInfo();
         }
     }
 
-    void sendInfo() {
+    void updateInfo() {
         addBehaviour(new AskSlotValues());
     }
 
