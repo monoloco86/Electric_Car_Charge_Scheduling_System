@@ -23,10 +23,20 @@ public class Initialiser extends Agent {
 		 */
 
 		Integer carCounter = new Integer(0);
-		Integer carAmount = new Integer(3);
+		Integer carAmount = new Integer(1);
 		for (carCounter = 0; carCounter < carAmount; carCounter++) {
 			super.addBehaviour(new Initialise("CarAgent" + carCounter.toString(),"agents.CarAgent", null));
 		}
+		
+        /*
+         * Deploy Summary agents.
+         */
+
+        Integer summaryCounter = new Integer(0);
+        Integer summaryAmount = new Integer(1);
+        for (summaryCounter = 0; summaryCounter < summaryAmount; summaryCounter++) {
+            super.addBehaviour(new Initialise("SummaryAgent" + summaryCounter.toString(),"agents.SummaryAgent", null));
+        }
 	}
 
 }

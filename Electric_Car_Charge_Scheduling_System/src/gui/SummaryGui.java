@@ -26,9 +26,9 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import agents.CarAgent;
+import agents.SummaryAgent;
 
-public class CarGui extends JFrame implements ActionListener,
+public class SummaryGui extends JFrame implements ActionListener,
         PropertyChangeListener {
 
     private static final long serialVersionUID = -4294488323535790208L;
@@ -44,11 +44,11 @@ public class CarGui extends JFrame implements ActionListener,
     private JTable opTable;
     private JButton ok, cancel, quit;
 
-    private CarAgent myAgent;
+    private SummaryAgent myAgent;
 
-    public CarGui(CarAgent car, Integer slotValue) {
+    public SummaryGui(SummaryAgent summary) {
 
-        myAgent = car;
+        myAgent = summary;
 
         setTitle(myAgent.getLocalName());
 
@@ -71,7 +71,7 @@ public class CarGui extends JFrame implements ActionListener,
 
         JPanel p = new JPanel();
         p.setLayout(new BorderLayout(0, 0));
-        p.add(slotPos = new JLabel("Slot position " + slotValue), BorderLayout.NORTH);
+        p.add(slotPos = new JLabel("Slot position "), BorderLayout.NORTH);
 
         panel.add(p, BorderLayout.CENTER);
 
