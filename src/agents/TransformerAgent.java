@@ -101,7 +101,7 @@ public class TransformerAgent extends GuiAgent {
             sendInfo();
         }
         else if (command == 70) {
-            sendInfo();
+            randCharge();
         }
     }
 
