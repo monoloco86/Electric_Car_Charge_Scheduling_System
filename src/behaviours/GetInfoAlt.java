@@ -4,7 +4,7 @@ package behaviours;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
-public class GetInfo extends CyclicBehaviour {
+public class GetInfoAlt extends CyclicBehaviour {
 
     private static final long serialVersionUID = -8948876678560026420L;
 

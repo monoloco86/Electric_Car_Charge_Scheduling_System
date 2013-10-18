@@ -2,11 +2,12 @@
 package agents;
 
 import gui.CarGui;
-
+import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.DataStore;
 import jade.core.behaviours.SequentialBehaviour;
 import behaviours.GetInfo;
+import behaviours.GetInfoAlt;
 import behaviours.InformWorld;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -27,6 +28,8 @@ public class CarAgent extends GuiAgent {
     static final int WAIT = -1;
     static final int QUIT = 0;
     private int command = WAIT;
+    Behaviour getInfo = new GetInfo();
+    Behaviour getInfoAlt = new GetInfoAlt();
 
     SequentialBehaviour carSuperBehaviour = new SequentialBehaviour();
 
@@ -64,7 +67,7 @@ public class CarAgent extends GuiAgent {
 
         carSuperBehaviour.setDataStore(ds);
         super.addBehaviour(carSuperBehaviour);
-        carSuperBehaviour.addSubBehaviour(new GetInfo());
+        carSuperBehaviour.addSubBehaviour(getInfo);
 
         // Instanciate the gui
         myGui = new CarGui(this, (Integer) this.ds.get("slotValue"));
@@ -114,6 +117,20 @@ public class CarAgent extends GuiAgent {
             ds.put("timeNeeded", (Integer) ge.getParameter(0));
             ds.put("timeTillUse", (Integer) ge.getParameter(1));
             sendInfo();
+        }
+        else if (command == 70) {
+            changeAlgorithms();
+        }
+    }
+
+    void changeAlgorithms() {
+        if (carSuperBehaviour.getChildren().toString().toLowerCase().contains("getinfoalt")) {
+            carSuperBehaviour.removeSubBehaviour(getInfoAlt);
+            carSuperBehaviour.addSubBehaviour(getInfo);
+        }
+        else {
+            carSuperBehaviour.removeSubBehaviour(getInfo);
+            carSuperBehaviour.addSubBehaviour(getInfoAlt);
         }
     }
 
