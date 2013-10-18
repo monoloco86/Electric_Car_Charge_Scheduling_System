@@ -34,7 +34,7 @@ public class CarGui extends JFrame implements ActionListener,
     private int status = IN_PROCESS;
     private JTextField msg, timeTillUse, timeNeeded;
     private JLabel slotPos;
-    private JButton ok, cancel, quit;
+    private JButton ok, alt, cancel, quit;
 
     private CarAgent myAgent;
 
@@ -87,10 +87,13 @@ public class CarGui extends JFrame implements ActionListener,
         pane = new JPanel();
         panel.add(pane, BorderLayout.NORTH);
         pane.setBorder(new EmptyBorder(0, 0, 130, 0));
-        pane.setLayout(new GridLayout(3, 1, 0, 5));
+        pane.setLayout(new GridLayout(4, 1, 0, 5));
         pane.add(ok = new JButton("OK"));
         ok.setToolTipText("Submit operation");
         ok.addActionListener(this);
+        pane.add(alt = new JButton("Toggle Algorithm"));
+        alt.setToolTipText("Submit operation");
+        alt.addActionListener(this);
         pane.add(cancel = new JButton("Cancel"));
         cancel.setToolTipText("Submit operation");
         cancel.setEnabled(false);
@@ -143,6 +146,10 @@ public class CarGui extends JFrame implements ActionListener,
             status = IN_PROCESS;
             cancel.setEnabled(false);
             msg.setText("Operation canceled!");
+         }
+        else if (ae.getSource() == alt) {
+            GuiEvent ge = new GuiEvent(this, 70); 
+            myAgent.postGuiEvent(ge);   
          }
     }
 
