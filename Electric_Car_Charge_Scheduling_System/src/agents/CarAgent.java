@@ -3,9 +3,6 @@ package agents;
 
 import gui.CarGui;
 
-import java.util.Random;
-
-import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.DataStore;
 import jade.core.behaviours.SequentialBehaviour;
@@ -56,8 +53,6 @@ public class CarAgent extends GuiAgent {
          * Double timeTillUse = new Double(1000 * randomTime.nextDouble());
          * Double chargeNeeded = new Double(500 * randomCharge.nextDouble());
          */
-
-        Random randomTime = new Random();
 
         Integer slotValue = new Integer(0);
         Integer timeNeeded = new Integer(10000);

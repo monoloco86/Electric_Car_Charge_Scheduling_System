@@ -3,17 +3,13 @@ package agents;
 
 import gui.SummaryGui;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
-import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.DataStore;
 import jade.core.behaviours.SequentialBehaviour;
 import behaviours.AskSlotValues;
 import behaviours.GetInfo;
-import behaviours.InformWorld;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -66,6 +62,8 @@ public class SummaryAgent extends GuiAgent {
         myGui.setVisible(true);
 
         super.addBehaviour(new CyclicBehaviour(this) {
+
+            private static final long serialVersionUID = 1274196283439389278L;
 
             public void action() {
                 ACLMessage msg = receive();

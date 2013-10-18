@@ -4,8 +4,6 @@ package gui;
 import jade.gui.GuiEvent;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -16,13 +14,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
@@ -36,12 +31,9 @@ public class SummaryGui extends JFrame implements ActionListener,
     final static int IN_PROCESS = 0;
     final static int WAIT_CONFIRM = 1;
     final static int IN_LINE = 2;
-    private int status = IN_PROCESS;
-    private JTextField msg, timeTillUse, timeNeeded, acInfo;
-    private JComboBox menu;
-    private JList acList;
+    int status = IN_PROCESS;
+    private JTextField msg;
     private JLabel slotPos;
-    private JTable opTable;
     private JButton update, cancel, quit;
 
     private SummaryAgent myAgent;
@@ -103,7 +95,6 @@ public class SummaryGui extends JFrame implements ActionListener,
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-        // TODO Auto-generated method stub
         if (ae.getSource() == quit) {
             shutDown();
         }
@@ -116,7 +107,6 @@ public class SummaryGui extends JFrame implements ActionListener,
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        // TODO Auto-generated method stub
 
     }
 
