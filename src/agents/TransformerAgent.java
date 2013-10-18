@@ -4,7 +4,7 @@ package agents;
 import gui.TransformerGui;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
-import behaviours.GetInfoForCharging;
+import behaviours.AskSlotValues;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -19,7 +19,6 @@ public class TransformerAgent extends GuiAgent {
 
     transient protected TransformerGui myGui;
 
-
     static final int WAIT = -1;
     static final int QUIT = 0;
     private int command = WAIT;
@@ -27,6 +26,7 @@ public class TransformerAgent extends GuiAgent {
     private Integer energyLimit = new Integer(1000);
     private Integer energyPerCar = new Integer(100);
     private Integer currentEnergy = new Integer(0);
+    private Integer slotInt;
     SequentialBehaviour transformerSuperBehaviour = new SequentialBehaviour();
 
     protected void setup() {
@@ -65,14 +65,18 @@ public class TransformerAgent extends GuiAgent {
                                     + ": MESSAGE RECEIVED: "
                                     + msg.getContent() + " ---- From: "
                                     + msg.getSender().getLocalName());
-
+                            slotInt = Integer.parseInt(msg.getContent().substring(
+                                    msg.getContent().lastIndexOf(" ") + 1));
                             ACLMessage reply = msg.createReply();
                             reply.setPerformative(ACLMessage.INFORM);
-                            if ((energyPerCar + currentEnergy) > energyLimit)
-                                reply.setContent("sorry you will have to wait");
-                            else 
-                                reply.setContent("you are charging");
-                            super.myAgent.send(reply);
+                            if (slotInt > 0) {
+                                if ((energyPerCar + currentEnergy) > energyLimit)
+                                    reply.setContent("sorry you will have to wait");
+                                else
+                                    reply.setContent("you are charging");
+
+                                super.myAgent.send(reply);
+                            }
                         }
                 }
                 else
@@ -94,7 +98,7 @@ public class TransformerAgent extends GuiAgent {
     }
 
     void sendInfo() {
-        addBehaviour(new GetInfoForCharging());
+        addBehaviour(new AskSlotValues());
     }
 
     public void alertGui(String response) {

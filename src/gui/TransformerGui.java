@@ -63,14 +63,14 @@ public class TransformerGui extends JFrame implements ActionListener,
 
         JPanel p = new JPanel();
         p.setLayout(new BorderLayout(0, 0));
-        p.add(slotPos = new JLabel("Slot positions"), BorderLayout.NORTH);
+        p.add(slotPos = new JLabel("Energy Level"), BorderLayout.EAST);
 
         panel.add(pane, BorderLayout.SOUTH);
 
         pane = new JPanel();
         panel.add(pane, BorderLayout.EAST);
-        pane.setBorder(new EmptyBorder(100, 50, 100, 50));
-        pane.setLayout(new GridLayout(1, 3));
+        pane.setBorder(new EmptyBorder(0, 0, 0, 150));
+        pane.setLayout(new GridLayout(3, 3));
         pane.add(update = new JButton("Update"));
         update.setToolTipText("Submit operation");
         update.addActionListener(this);
