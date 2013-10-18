@@ -34,7 +34,7 @@ public class TransformerGui extends JFrame implements ActionListener,
     int status = IN_PROCESS;
     private JTextField msg;
     private JLabel slotPos;
-    private JButton update, cancel, quit;
+    private JButton update, rand, cancel, quit;
 
     private TransformerAgent myAgent;
 
@@ -63,17 +63,23 @@ public class TransformerGui extends JFrame implements ActionListener,
 
         JPanel p = new JPanel();
         p.setLayout(new BorderLayout(0, 0));
-        p.add(slotPos = new JLabel("Energy Level"), BorderLayout.EAST);
+        p.add(slotPos = new JLabel("Energy Level"), BorderLayout.NORTH);
 
         panel.add(pane, BorderLayout.SOUTH);
+        panel = new JPanel();
+        base.add(panel, BorderLayout.EAST);
+        panel.setLayout(new BorderLayout(0, 10));
 
         pane = new JPanel();
         panel.add(pane, BorderLayout.EAST);
-        pane.setBorder(new EmptyBorder(0, 0, 0, 150));
-        pane.setLayout(new GridLayout(3, 3));
+        pane.setBorder(new EmptyBorder(0, 0, 130, 0));
+        pane.setLayout(new GridLayout(4, 1, 0, 5));
         pane.add(update = new JButton("Update"));
         update.setToolTipText("Submit operation");
         update.addActionListener(this);
+        pane.add(rand = new JButton("Random Charge"));
+        rand.setToolTipText("Submit operation");
+        rand.addActionListener(this);
         pane.add(cancel = new JButton("Cancel"));
         cancel.setToolTipText("Submit operation");
         cancel.setEnabled(false);
@@ -99,8 +105,13 @@ public class TransformerGui extends JFrame implements ActionListener,
             shutDown();
         }
         else if (ae.getSource() == update) {
-            alertInfo("Update slot list");
+            alertInfo("Update charge");
             GuiEvent ge = new GuiEvent(this, 55);
+            myAgent.postGuiEvent(ge);
+        }
+        else if (ae.getSource() == rand) {
+            alertInfo("Random charge");
+            GuiEvent ge = new GuiEvent(this, 70);
             myAgent.postGuiEvent(ge);
         }
     }

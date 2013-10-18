@@ -1,6 +1,8 @@
 
 package agents;
 
+import java.util.Random;
+
 import gui.TransformerGui;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
@@ -27,6 +29,9 @@ public class TransformerAgent extends GuiAgent {
     private Integer energyPerCar = new Integer(100);
     private Integer currentEnergy = new Integer(0);
     private Integer slotInt;
+    
+    Random random = new Random();
+    
     SequentialBehaviour transformerSuperBehaviour = new SequentialBehaviour();
 
     protected void setup() {
@@ -95,12 +100,19 @@ public class TransformerAgent extends GuiAgent {
         else if (command == 55) {
             sendInfo();
         }
+        else if (command == 70) {
+            sendInfo();
+        }
     }
 
     void sendInfo() {
         addBehaviour(new AskSlotValues());
     }
 
+    void randCharge() {
+        energyLimit = random.nextInt(2000);
+    }
+    
     public void alertGui(String response) {
         myGui.alertResponse(response);
     }
