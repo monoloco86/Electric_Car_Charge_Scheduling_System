@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -34,6 +35,7 @@ public class TransformerGui extends JFrame implements ActionListener{
     private JTextField msg;
     private JLabel energyLimit, currentEnergy;
     private JButton update, rand, cancel, quit;
+    private Map<String, Integer> map;
 
     private TransformerAgent myAgent;
 
@@ -137,8 +139,13 @@ public class TransformerGui extends JFrame implements ActionListener{
         }
     }
 
-    public void alertResponse(String s) {
-        msg.setText(s.toString());
+    @SuppressWarnings("unchecked")
+    public void alertResponse(Object o) {
+        if (o instanceof String)
+            msg.setText((String)o);
+        else if (o instanceof Map){
+            this.map = (Map<String, Integer>)o;
+        }
     }
     
     public void alertLimit(Integer i) {

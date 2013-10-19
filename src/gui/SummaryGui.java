@@ -1,3 +1,4 @@
+
 package gui;
 
 import jade.gui.GuiEvent;
@@ -9,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -16,13 +18,16 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
 
 import agents.SummaryAgent;
 
-public class SummaryGui extends JFrame implements ActionListener{
+public class SummaryGui extends JFrame implements ActionListener {
 
     private static final long serialVersionUID = -4294488323535790208L;
 
@@ -34,11 +39,10 @@ public class SummaryGui extends JFrame implements ActionListener{
     final static int ALT_SIGNAL = 70;
     int status = IN_PROCESS;
     private JTextField msg;
-    private JLabel slotPos;
     private JButton update, cancel, quit;
-    private Map<String, Integer> map;
     private JTable slotOrder;
 
+    private Map<String, Integer> map = new HashMap<String, Integer>();
     private SummaryAgent myAgent;
 
     public SummaryGui(SummaryAgent summary) {
@@ -63,19 +67,21 @@ public class SummaryGui extends JFrame implements ActionListener{
         msg.setHorizontalAlignment(JTextField.CENTER);
         panel.add(pane, BorderLayout.NORTH);
         pane = new JPanel();
-        pane.setLayout(new BorderLayout(5,0));
+        pane.setLayout(new BorderLayout(5, 0));
 
-
-        JPanel p = new JPanel();
-        p.setLayout(new BorderLayout(0, 0));
-        p.add(slotPos = new JLabel("Slot positions"), BorderLayout.NORTH);
-
+        TableModel model = new TableDataModel(map);
+        slotOrder = new JTable(model);
+        pane.add(new JScrollPane(slotOrder), BorderLayout.SOUTH);
+        pane.setSize(20, 30);
         panel.add(pane, BorderLayout.SOUTH);
-
         pane = new JPanel();
-        panel.add(pane, BorderLayout.EAST);
-        pane.setBorder(new EmptyBorder(100, 50, 100, 50));
-        pane.setLayout(new GridLayout(1, 3));
+        pane.setLayout(new BorderLayout(5, 0));
+
+        panel = new JPanel();
+        base.add(panel, BorderLayout.EAST);
+        panel.add(pane, BorderLayout.NORTH);
+        pane.setBorder(new EmptyBorder(0, 0, 130, 0));
+        pane.setLayout(new GridLayout(3, 1, 0, 5));
         pane.add(update = new JButton("Update"));
         update.setToolTipText("Submit operation");
         update.addActionListener(this);
@@ -93,7 +99,7 @@ public class SummaryGui extends JFrame implements ActionListener{
             }
         });
 
-        setSize(470, 350);
+        setSize(600, 550);
         setResizable(false);
 
     }
@@ -132,14 +138,58 @@ public class SummaryGui extends JFrame implements ActionListener{
     @SuppressWarnings("unchecked")
     public void alertResponse(Object o) {
         if (o instanceof String)
-            msg.setText((String)o);
-        else if (o instanceof Map){
-            this.map = (Map<String, Integer>)o;
+            msg.setText((String) o);
+        else if (o instanceof Map) {
+            TableDataModel model = new TableDataModel((Map<String, Integer>) o);
+            slotOrder.setModel(model);
+            slotOrder.updateUI();
         }
     }
 
     public void resetStatus() {
 
         status = IN_PROCESS;
+    }
+
+    private class TableDataModel extends AbstractTableModel {
+
+        private static final long serialVersionUID = 7015333148116529992L;
+
+        private Map<String, Integer> data;
+        private String[] keys;
+
+        public TableDataModel(Map<String, Integer> map) {
+            data = map;
+            keys = data.keySet().toArray(new String[data.size()]);
+        }
+
+        @Override
+        public String getColumnName(int col) {
+            if (col == 0) {
+                return "Agent";
+            } else {
+                return "Value";
+            }
+        }
+
+        @Override
+        public int getColumnCount() {
+            return 2;
+        }
+
+        @Override
+        public int getRowCount() {
+            return data.size();
+        }
+
+        @Override
+        public Object getValueAt(int row, int col) {
+            if (col == 0) {
+                return keys[row];
+            } else {
+                return data.get(keys[row]);
+            }
+        }
+
     }
 }

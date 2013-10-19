@@ -120,7 +120,7 @@ public class TransformerAgent extends GuiAgent {
         myGui.alertLimit(energyLimit);
     }
 
-    public void alertGui(String response) {
+    public void alertGui(Object response) {
         myGui.alertResponse(response);
     }
     
