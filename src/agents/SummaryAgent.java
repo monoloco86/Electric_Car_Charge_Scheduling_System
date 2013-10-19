@@ -1,4 +1,3 @@
-
 package agents;
 
 import gui.SummaryGui;

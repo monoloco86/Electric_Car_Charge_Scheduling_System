@@ -76,11 +76,11 @@ public class TransformerAgent extends GuiAgent {
                         ACLMessage reply = msg.createReply();
                         reply.setPerformative(ACLMessage.INFORM);
                         if (slotInt > 0) {
-                            if ((energyPerCar + currentEnergy) > energyLimit)
+                            if ((energyPerCar + currentEnergy) > energyLimit) {
                                 reply.setContent("sorry you will have to wait");
-                            else
+                            } else {
                                 reply.setContent("you are charging");
-
+                            }
                             super.myAgent.send(reply);
                         }
                     }
