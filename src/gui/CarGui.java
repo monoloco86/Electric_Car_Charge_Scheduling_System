@@ -34,7 +34,7 @@ public class CarGui extends JFrame implements ActionListener{
     
     private int status = IN_PROCESS;
     private JTextField msg, timeTillUse, timeNeeded;
-    private JLabel slotPos;
+    private JLabel slotPos, tillUseFrame, timeNeededFrame;
     private JButton store, update, alt, cancel, quit;
 
     private CarAgent myAgent;
@@ -64,7 +64,9 @@ public class CarGui extends JFrame implements ActionListener{
 
         JPanel p = new JPanel();
         p.setLayout(new BorderLayout(0, 0));
-        p.add(slotPos = new JLabel("Slot position " + slotValue), BorderLayout.NORTH);
+        p.add(slotPos = new JLabel("Slot position: " + slotValue), BorderLayout.NORTH);
+        p.add(tillUseFrame = new JLabel("Time till use: " + 0), BorderLayout.CENTER);
+        p.add(timeNeededFrame = new JLabel("Time needed to charge: " + 0), BorderLayout.SOUTH);
 
         panel.add(p, BorderLayout.CENTER);
 
@@ -138,6 +140,8 @@ public class CarGui extends JFrame implements ActionListener{
                 GuiEvent ge = new GuiEvent(this, STORE_SIGNAL);
                 ge.addParameter(new Integer(timeNeeded.getText()));
                 ge.addParameter(new Integer(timeTillUse.getText()));
+                timeNeededFrame.setText("Time needed to charge: " + timeNeeded.getText());
+                tillUseFrame.setText("Time till use: " + timeTillUse.getText());
                 myAgent.postGuiEvent(ge);
             }
             else {
@@ -180,7 +184,15 @@ public class CarGui extends JFrame implements ActionListener{
     }
 
     public void alertResponse(String s) {
-        slotPos.setText("Slot position " + s.toString());
+        slotPos.setText("Slot position: " + s.toString());
+    }
+    
+    public void alertNeeded(String s) {
+        timeNeededFrame.setText("Time needed to charge: " + s.toString());
+    }
+    
+    public void alertUse(String s) {
+        tillUseFrame.setText("Time till use: " + s.toString());
     }
 
     public void resetStatus() {
