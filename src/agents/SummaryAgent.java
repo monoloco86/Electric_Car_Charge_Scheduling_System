@@ -27,7 +27,9 @@ public class SummaryAgent extends GuiAgent {
     private DataStore ds = new DataStore();
 
     static final int WAIT = -1;
-    static final int QUIT = 0;
+    final static int EXIT_SIGNAL = 0;
+    final static int UPDATE_SIGNAL = 65;
+    final static int ALT_SIGNAL = 70;
     private int command = WAIT;
     Integer slotInt;
 
@@ -82,12 +84,12 @@ public class SummaryAgent extends GuiAgent {
 
     protected void onGuiEvent(GuiEvent ge) {
         command = ge.getType();
-        if (command == QUIT) {
+        if (command == EXIT_SIGNAL) {
             alertGui("Bye!");
             doDelete();
-            System.exit(0);
+            System.exit(EXIT_SIGNAL);
         }
-        else if (command == 55) {
+        else if (command == UPDATE_SIGNAL) {
             updateInfo();
         }
     }

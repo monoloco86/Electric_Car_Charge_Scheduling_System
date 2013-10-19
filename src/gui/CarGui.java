@@ -23,15 +23,20 @@ import agents.CarAgent;
 
 public class CarGui extends JFrame implements ActionListener{
 
-    private static final long serialVersionUID = -4294488323535790208L;
-
+    private static final long serialVersionUID = 434802339658676247L;
+    
     final static int IN_PROCESS = 0;
     final static int WAIT_CONFIRM = 1;
     final static int IN_LINE = 2;
+    final static int EXIT_SIGNAL = 0;
+    final static int UPDATE_SIGNAL = 65;
+    final static int STORE_SIGNAL = 55;
+    final static int ALT_SIGNAL = 70;
+    
     private int status = IN_PROCESS;
     private JTextField msg, timeTillUse, timeNeeded;
     private JLabel slotPos;
-    private JButton ok, alt, cancel, quit;
+    private JButton store, update, alt, cancel, quit;
 
     private CarAgent myAgent;
 
@@ -84,10 +89,13 @@ public class CarGui extends JFrame implements ActionListener{
         pane = new JPanel();
         panel.add(pane, BorderLayout.NORTH);
         pane.setBorder(new EmptyBorder(0, 0, 130, 0));
-        pane.setLayout(new GridLayout(4, 1, 0, 5));
-        pane.add(ok = new JButton("OK"));
-        ok.setToolTipText("Submit operation");
-        ok.addActionListener(this);
+        pane.setLayout(new GridLayout(5, 1, 0, 5));
+        pane.add(store = new JButton("Store"));
+        store.setToolTipText("Submit operation");
+        store.addActionListener(this);
+        pane.add(update = new JButton("Update"));
+        update.setToolTipText("Submit operation");
+        update.addActionListener(this);
         pane.add(alt = new JButton("Toggle Algorithm"));
         alt.setToolTipText("Submit operation");
         alt.addActionListener(this);
@@ -115,7 +123,7 @@ public class CarGui extends JFrame implements ActionListener{
         if (ae.getSource() == quit) {
             shutDown();
         }
-        else if (ae.getSource() == ok) {
+        else if (ae.getSource() == store) {
             if (timeTillUse.getText().length() == 0) {
                 alertInfo("Enter an amount");
                 timeTillUse.requestFocus();
@@ -128,7 +136,7 @@ public class CarGui extends JFrame implements ActionListener{
             }
             else if (timeTillUse.getText().matches("[0-9]+")
                     && timeNeeded.getText().matches("[0-9]+")) {
-                GuiEvent ge = new GuiEvent(this, 55);
+                GuiEvent ge = new GuiEvent(this, STORE_SIGNAL);
                 ge.addParameter(new Integer(timeNeeded.getText()));
                 ge.addParameter(new Integer(timeTillUse.getText()));
                 myAgent.postGuiEvent(ge);
@@ -137,15 +145,18 @@ public class CarGui extends JFrame implements ActionListener{
                 alertInfo("Enter numbers only");
                 return;
             }
-
         }
+        else if (ae.getSource() == update) {
+            GuiEvent ge = new GuiEvent(this, UPDATE_SIGNAL); 
+            myAgent.postGuiEvent(ge);   
+         }
         else if (ae.getSource() == cancel && status != IN_LINE) {
             status = IN_PROCESS;
             cancel.setEnabled(false);
             msg.setText("Operation canceled!");
          }
         else if (ae.getSource() == alt) {
-            GuiEvent ge = new GuiEvent(this, 70); 
+            GuiEvent ge = new GuiEvent(this, ALT_SIGNAL); 
             myAgent.postGuiEvent(ge);   
          }
     }
@@ -164,7 +175,7 @@ public class CarGui extends JFrame implements ActionListener{
                 myAgent.getLocalName(),
                 JOptionPane.YES_NO_CANCEL_OPTION);
         if (rep == JOptionPane.YES_OPTION) {
-            GuiEvent ge = new GuiEvent(this, 0);
+            GuiEvent ge = new GuiEvent(this, EXIT_SIGNAL);
             myAgent.postGuiEvent(ge);
         }
     }

@@ -28,6 +28,9 @@ public class SummaryGui extends JFrame implements ActionListener{
     final static int IN_PROCESS = 0;
     final static int WAIT_CONFIRM = 1;
     final static int IN_LINE = 2;
+    final static int EXIT_SIGNAL = 0;
+    final static int UPDATE_SIGNAL = 65;
+    final static int ALT_SIGNAL = 70;
     int status = IN_PROCESS;
     private JTextField msg;
     private JLabel slotPos;
@@ -97,7 +100,7 @@ public class SummaryGui extends JFrame implements ActionListener{
         }
         else if (ae.getSource() == update) {
             alertInfo("Update slot list");
-            GuiEvent ge = new GuiEvent(this, 55);
+            GuiEvent ge = new GuiEvent(this, UPDATE_SIGNAL);
             myAgent.postGuiEvent(ge);
         }
     }
@@ -116,7 +119,7 @@ public class SummaryGui extends JFrame implements ActionListener{
                 myAgent.getLocalName(),
                 JOptionPane.YES_NO_CANCEL_OPTION);
         if (rep == JOptionPane.YES_OPTION) {
-            GuiEvent ge = new GuiEvent(this, 0);
+            GuiEvent ge = new GuiEvent(this, EXIT_SIGNAL);
             myAgent.postGuiEvent(ge);
         }
     }

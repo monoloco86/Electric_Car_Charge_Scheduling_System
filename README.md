@@ -16,11 +16,12 @@ Later on there will be a way of swapping algorithms and a dynamic power transfor
 CarGui
 * Input TimeTillUse
 * Input TimeNeededTill charge
-* Click OK to store values and send it to other car agent. Other car agents will then assign slot values depending on times of the other cars
+* Click Store to store values 
+* Click update to send messages to other car agents. Other car agents will then assign slot values depending on times of the other cars
 
 SummaryGui
 * Click update to ask cars for values. 
-* Summary will then sort thesevalues and output them.
+* Summary will then sort these values and output them.
 
 TransformerGui
 * Click update to check if car can be added to queue and if it can send a message to cae agent to start charging

@@ -22,7 +22,9 @@ public class TransformerAgent extends GuiAgent {
     transient protected TransformerGui myGui;
 
     static final int WAIT = -1;
-    static final int QUIT = 0;
+    final static int EXIT_SIGNAL = 0;
+    final static int UPDATE_SIGNAL = 65;
+    final static int RAND_SIGNAL = 70;
     private int command = WAIT;
 
     private Integer energyLimit = new Integer(1000);
@@ -92,15 +94,15 @@ public class TransformerAgent extends GuiAgent {
 
     protected void onGuiEvent(GuiEvent ge) {
         command = ge.getType();
-        if (command == QUIT) {
+        if (command == EXIT_SIGNAL) {
             alertGui("Bye!");
             doDelete();
-            System.exit(0);
+            System.exit(EXIT_SIGNAL);
         }
-        else if (command == 55) {
+        else if (command == UPDATE_SIGNAL) {
             sendInfo();
         }
-        else if (command == 70) {
+        else if (command == RAND_SIGNAL) {
             randCharge();
         }
     }

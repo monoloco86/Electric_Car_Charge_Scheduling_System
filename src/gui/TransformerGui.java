@@ -28,6 +28,9 @@ public class TransformerGui extends JFrame implements ActionListener{
     final static int IN_PROCESS = 0;
     final static int WAIT_CONFIRM = 1;
     final static int IN_LINE = 2;
+    final static int EXIT_SIGNAL = 0;
+    final static int UPDATE_SIGNAL = 65;
+    final static int RAND_SIGNAL = 70;
     int status = IN_PROCESS;
     private JTextField msg;
     private JLabel slotPos;
@@ -103,12 +106,12 @@ public class TransformerGui extends JFrame implements ActionListener{
         }
         else if (ae.getSource() == update) {
             alertInfo("Update charge");
-            GuiEvent ge = new GuiEvent(this, 55);
+            GuiEvent ge = new GuiEvent(this, UPDATE_SIGNAL);
             myAgent.postGuiEvent(ge);
         }
         else if (ae.getSource() == rand) {
             alertInfo("Random charge");
-            GuiEvent ge = new GuiEvent(this, 70);
+            GuiEvent ge = new GuiEvent(this, RAND_SIGNAL);
             myAgent.postGuiEvent(ge);
         }
     }
@@ -127,7 +130,7 @@ public class TransformerGui extends JFrame implements ActionListener{
                 myAgent.getLocalName(),
                 JOptionPane.YES_NO_CANCEL_OPTION);
         if (rep == JOptionPane.YES_OPTION) {
-            GuiEvent ge = new GuiEvent(this, 0);
+            GuiEvent ge = new GuiEvent(this, EXIT_SIGNAL);
             myAgent.postGuiEvent(ge);
         }
     }
