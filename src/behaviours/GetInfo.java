@@ -45,9 +45,6 @@ public class GetInfo extends CyclicBehaviour {
                     super.getParent().getDataStore().put("slotValue", newSlotValue);
                     System.out.println(super.myAgent.getLocalName() + " has a slot value of "
                             + super.getParent().getDataStore().get("slotValue").toString());
-        
-                    //NEED TO FIGURE OUT A WAY TO TRIGGER THIS
-                    //super.myAgent.alertGui(ds.get("slotValue").toString());
                 }
             }
         } else
