@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -16,8 +17,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
 
 import agents.TransformerAgent;
 
@@ -35,8 +40,9 @@ public class TransformerGui extends JFrame implements ActionListener{
     private JTextField msg;
     private JLabel energyLimit, currentEnergy;
     private JButton update, rand, cancel, quit;
-    private Map<String, Integer> map;
+    private JTable slotOrder;
 
+    private Map<String, Integer> map = new HashMap<String, Integer>();
     private TransformerAgent myAgent;
 
     public TransformerGui(TransformerAgent transformer, Integer limit) {
@@ -64,6 +70,15 @@ public class TransformerGui extends JFrame implements ActionListener{
         pane = new JPanel();
         pane.setLayout(new BorderLayout(5,0));
 
+
+        TableModel model = new TableDataModel(map);
+        slotOrder = new JTable(model);
+        pane.add(new JScrollPane(slotOrder), BorderLayout.WEST);
+        pane.setSize(20, 30);
+        panel.add(pane, BorderLayout.WEST);
+        pane = new JPanel();
+        pane.setLayout(new BorderLayout(5, 0));
+        
         JPanel p = new JPanel();
         p.setLayout(new BorderLayout(0, 0));
         p.add(energyLimit = new JLabel("Energy Limit: " + limit), BorderLayout.NORTH);
@@ -77,7 +92,7 @@ public class TransformerGui extends JFrame implements ActionListener{
         pane = new JPanel();
         panel.add(pane, BorderLayout.EAST);
         pane.setBorder(new EmptyBorder(0, 0, 130, 0));
-        pane.setLayout(new GridLayout(4, 1, 0, 5));
+        pane.setLayout(new GridLayout(10, 1, 0, 5));
         pane.add(update = new JButton("Update"));
         update.setToolTipText("Submit operation");
         update.addActionListener(this);
@@ -98,7 +113,7 @@ public class TransformerGui extends JFrame implements ActionListener{
             }
         });
 
-        setSize(470, 350);
+        setSize(650, 550);
         setResizable(false);
 
     }
@@ -144,7 +159,9 @@ public class TransformerGui extends JFrame implements ActionListener{
         if (o instanceof String)
             msg.setText((String)o);
         else if (o instanceof Map){
-            this.map = (Map<String, Integer>)o;
+            TableDataModel model = new TableDataModel((Map<String, Integer>) o);
+            slotOrder.setModel(model);
+            slotOrder.updateUI();
         }
     }
     
@@ -159,5 +176,46 @@ public class TransformerGui extends JFrame implements ActionListener{
     public void resetStatus() {
 
         status = IN_PROCESS;
+    }
+    
+    private class TableDataModel extends AbstractTableModel {
+
+        private static final long serialVersionUID = -9046466617697329165L;
+        private Map<String, Integer> data;
+        private String[] keys;
+
+        public TableDataModel(Map<String, Integer> map) {
+            data = map;
+            keys = data.keySet().toArray(new String[data.size()]);
+        }
+
+        @Override
+        public String getColumnName(int col) {
+            if (col == 0) {
+                return "Agent";
+            } else {
+                return "Value";
+            }
+        }
+
+        @Override
+        public int getColumnCount() {
+            return 2;
+        }
+
+        @Override
+        public int getRowCount() {
+            return data.size();
+        }
+
+        @Override
+        public Object getValueAt(int row, int col) {
+            if (col == 0) {
+                return keys[row];
+            } else {
+                return data.get(keys[row]);
+            }
+        }
+
     }
 }

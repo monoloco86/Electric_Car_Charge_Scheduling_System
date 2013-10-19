@@ -1,6 +1,10 @@
 
 package agents;
 
+import util.MapUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import gui.TransformerGui;
@@ -31,6 +35,8 @@ public class TransformerAgent extends GuiAgent {
     private Integer energyPerCar = new Integer(100);
     private Integer currentEnergy = new Integer(0);
     private Integer slotInt;
+    
+    Map<String, Integer> map = new HashMap<String, Integer>();  
 
     Random random = new Random();
 
@@ -82,6 +88,15 @@ public class TransformerAgent extends GuiAgent {
                                 currentEnergy += energyPerCar;
                                 reply.setContent("you are charging");
                                 myGui.alertCurrent(currentEnergy);
+                                slotInt = Integer.parseInt(msg.getContent().substring(msg.getContent().lastIndexOf(" ") + 1));
+                                System.out.println(msg.getSender().getLocalName() + " has a slot value of " + slotInt);
+                                map.put(msg.getSender().getLocalName(), slotInt);
+                                map = MapUtil.sortByValue(map);
+                                for(Map.Entry<String, Integer> entry : map.entrySet()) {
+                                    System.out.println("LOOPING");
+                                    System.out.println(entry.getKey() + ": " + entry.getValue());
+                                }
+                                alertGui(map);
                             }
                             super.myAgent.send(reply);
                         }
