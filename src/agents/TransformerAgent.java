@@ -111,6 +111,8 @@ public class TransformerAgent extends GuiAgent {
 
     void randCharge() {
         energyLimit = random.nextInt(2000);
+        while(energyLimit < currentEnergy)
+            energyLimit = random.nextInt(2000);            
     }
     
     public void alertGui(String response) {
