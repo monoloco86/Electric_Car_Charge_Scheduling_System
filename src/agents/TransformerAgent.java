@@ -56,7 +56,7 @@ public class TransformerAgent extends GuiAgent {
         }
 
         // Instanciate the gui
-        myGui = new TransformerGui(this);
+        myGui = new TransformerGui(this, energyLimit);
         myGui.setVisible(true);
 
         super.addBehaviour(new CyclicBehaviour(this) {
@@ -79,7 +79,9 @@ public class TransformerAgent extends GuiAgent {
                             if ((energyPerCar + currentEnergy) > energyLimit) {
                                 reply.setContent("sorry you will have to wait");
                             } else {
+                                currentEnergy += energyPerCar;
                                 reply.setContent("you are charging");
+                                myGui.alertCurrent(currentEnergy);
                             }
                             super.myAgent.send(reply);
                         }
@@ -115,11 +117,20 @@ public class TransformerAgent extends GuiAgent {
         while (energyLimit < currentEnergy)
             energyLimit = random.nextInt(2000);
         System.out.println(getLocalName() + " has an energy limit of " + energyLimit);
+        myGui.alertLimit(energyLimit);
     }
 
     public void alertGui(String response) {
         myGui.alertResponse(response);
     }
+    
+    public void alertGuiLimit(Integer response) {
+        myGui.alertLimit(response);
+    }   
+    
+    public void alertGuiCurrent(Integer response) {
+        myGui.alertCurrent(response);
+    }   
 
     void resetStatusGui() {
         myGui.resetStatus();

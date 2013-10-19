@@ -54,15 +54,17 @@ public class SummaryGui extends JFrame implements ActionListener{
 
         JPanel panel = new JPanel();
         base.add(panel, BorderLayout.WEST);
-        panel.setLayout(new BorderLayout(0, 5));
+        panel.setLayout(new BorderLayout(0, 16));
         JPanel pane = new JPanel();
         pane.setLayout(new BorderLayout(0, 0));
         pane.add(new JLabel("Message"), BorderLayout.NORTH);
-
         pane.add(msg = new JTextField("No messages recieved", 15));
         msg.setEditable(false);
         msg.setHorizontalAlignment(JTextField.CENTER);
         panel.add(pane, BorderLayout.NORTH);
+        pane = new JPanel();
+        pane.setLayout(new BorderLayout(5,0));
+
 
         JPanel p = new JPanel();
         p.setLayout(new BorderLayout(0, 0));

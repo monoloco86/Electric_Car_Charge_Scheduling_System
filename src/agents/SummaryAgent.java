@@ -102,7 +102,7 @@ public class SummaryAgent extends GuiAgent {
     public void alertGui(Object response) {
         myGui.alertResponse(response);
     }   
-
+    
     void resetStatusGui() {
         myGui.resetStatus();
     }

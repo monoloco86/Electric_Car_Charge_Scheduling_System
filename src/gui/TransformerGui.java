@@ -32,14 +32,14 @@ public class TransformerGui extends JFrame implements ActionListener{
     final static int RAND_SIGNAL = 70;
     int status = IN_PROCESS;
     private JTextField msg;
-    private JLabel slotPos;
+    private JLabel energyLimit, currentEnergy;
     private JButton update, rand, cancel, quit;
 
     private TransformerAgent myAgent;
 
-    public TransformerGui(TransformerAgent summary) {
+    public TransformerGui(TransformerAgent transformer, Integer limit) {
 
-        myAgent = summary;
+        myAgent = transformer;
 
         setTitle(myAgent.getLocalName());
 
@@ -59,12 +59,15 @@ public class TransformerGui extends JFrame implements ActionListener{
         msg.setEditable(false);
         msg.setHorizontalAlignment(JTextField.CENTER);
         panel.add(pane, BorderLayout.NORTH);
+        pane = new JPanel();
+        pane.setLayout(new BorderLayout(5,0));
 
         JPanel p = new JPanel();
         p.setLayout(new BorderLayout(0, 0));
-        p.add(slotPos = new JLabel("Energy Level"), BorderLayout.NORTH);
+        p.add(energyLimit = new JLabel("Energy Limit: " + limit), BorderLayout.NORTH);
+        p.add(currentEnergy = new JLabel("Current Energy: " + 0));
 
-        panel.add(pane, BorderLayout.SOUTH);
+        panel.add(p, BorderLayout.SOUTH);
         panel = new JPanel();
         base.add(panel, BorderLayout.EAST);
         panel.setLayout(new BorderLayout(0, 10));
@@ -135,7 +138,15 @@ public class TransformerGui extends JFrame implements ActionListener{
     }
 
     public void alertResponse(String s) {
-        slotPos.setText(s.toString());
+        msg.setText(s.toString());
+    }
+    
+    public void alertLimit(Integer i) {
+        energyLimit.setText("Current Energy: " + i.toString());
+    }
+    
+    public void alertCurrent(Integer i) {
+        currentEnergy.setText("Energy Limit: " + i.toString());
     }
 
     public void resetStatus() {
