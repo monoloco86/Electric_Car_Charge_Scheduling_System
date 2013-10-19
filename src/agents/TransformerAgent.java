@@ -85,7 +85,8 @@ public class TransformerAgent extends GuiAgent {
                         ACLMessage reply = msg.createReply();
                         reply.setPerformative(ACLMessage.INFORM);
                         map.put(msg.getSender().getLocalName(), slotInt);
-                        map = sortByValues(map);
+                        if(map.size() > 1)
+                            map = sortByValues(map);
                         if ((energyPerCar + currentEnergy) > energyLimit) {
                             int count = 1;
                             for (Map.Entry<String, Integer> entry : map.entrySet()) {

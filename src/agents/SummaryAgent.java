@@ -73,7 +73,8 @@ public class SummaryAgent extends GuiAgent {
                         slotInt = Integer.parseInt(msg.getContent().substring(msg.getContent().lastIndexOf(" ") + 1));
                         System.out.println(msg.getSender().getLocalName() + " has a slot value of " + slotInt);
                         map.put(msg.getSender().getLocalName(), slotInt);
-                        map = sortByValues(map);
+                        if(map.size() > 1)
+                            map = sortByValues(map);
                         for(Map.Entry<String, Integer> entry : map.entrySet()) {
                             System.out.println("LOOPING");
                             System.out.println(entry.getKey() + ": " + entry.getValue());
