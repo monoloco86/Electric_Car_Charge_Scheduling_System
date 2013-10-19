@@ -6,7 +6,6 @@ import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.DataStore;
 import jade.core.behaviours.ParallelBehaviour;
-import jade.core.behaviours.WakerBehaviour;
 import behaviours.GetInfo;
 import behaviours.GetInfoAlt;
 import behaviours.InformWorld;
@@ -33,6 +32,8 @@ public class CarAgent extends GuiAgent {
     final static int ALT_SIGNAL = 70;
 
     private int command = WAIT;
+    private boolean startFlag = false;
+
     Behaviour getInfo = new GetInfo();
     Behaviour getInfoAlt = new GetInfoAlt();
 
@@ -73,46 +74,51 @@ public class CarAgent extends GuiAgent {
         carSuperBehaviour.setDataStore(ds);
         super.addBehaviour(carSuperBehaviour);
         carSuperBehaviour.addSubBehaviour(getInfo);
-        
-        carSuperBehaviour.addSubBehaviour(new WakerBehaviour(this, 1000) {
+
+        carSuperBehaviour.addSubBehaviour(new CyclicBehaviour(this) {
 
             private static final long serialVersionUID = 908550917934326392L;
 
-            protected void handleElapsedTimeout() {
-                Integer newTimeNeeded = Integer.parseInt(ds.get("timeNeeded").toString()) - 1;
-                Integer newTimeTillUse = Integer.parseInt(ds.get("timeTillUse").toString()) - 1;
-                ds.put("timeNeeded", newTimeNeeded);
-                ds.put("timeTillUse", newTimeTillUse);
-                if((newTimeNeeded == 0) || (newTimeTillUse == 0)){
-                    ServiceDescription serviceDescription = new ServiceDescription();
-                    serviceDescription.setType("TransformerAgent");
-                    DFAgentDescription agentDescription = new DFAgentDescription();
-                    agentDescription.addServices(serviceDescription);
-                    
-                    DFAgentDescription[] result = new DFAgentDescription[0];
-                    try {
-                        result = DFService.search(super.myAgent, agentDescription);
-                    } catch (FIPAException e) {
-                        e.printStackTrace();
-                    }
-                    
-                    if (result.length > 0) {
-                                        
-                        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
-                        for (DFAgentDescription agent : result) {
-                            message.addReceiver(agent.getName());
+            @Override
+            public void action() {
+
+                if (startFlag) {
+                    Integer newTimeNeeded = Integer.parseInt(ds.get("timeNeeded").toString()) - 1;
+                    Integer newTimeTillUse = Integer.parseInt(ds.get("timeTillUse").toString()) - 1;
+                    ds.put("timeNeeded", newTimeNeeded);
+                    ds.put("timeTillUse", newTimeTillUse);
+                    if ((newTimeNeeded == 0) || (newTimeTillUse == 0)) {
+                        ServiceDescription serviceDescription = new ServiceDescription();
+                        serviceDescription.setType("TransformerAgent");
+                        DFAgentDescription agentDescription = new DFAgentDescription();
+                        agentDescription.addServices(serviceDescription);
+
+                        DFAgentDescription[] result = new DFAgentDescription[0];
+                        try {
+                            result = DFService.search(super.myAgent, agentDescription);
+                        } catch (FIPAException e) {
+                            e.printStackTrace();
                         }
-                        message.setContent("you can remove me");
-                        
-                        super.myAgent.send(message);            
+
+                        if (result.length > 0) {
+
+                            ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+                            for (DFAgentDescription agent : result) {
+                                message.addReceiver(agent.getName());
+                            }
+                            message.setContent("you can remove me");
+                            startFlag = false;
+                            super.myAgent.send(message);
+                        }
                     }
+                    System.out.println("I WOKE UP");
+                    alertTimeNeeded(newTimeNeeded.toString());
+                    alertTimeTillUse(newTimeTillUse.toString());
+                    block(1000);
                 }
-                alertTimeNeeded(newTimeNeeded.toString());
-                alertTimeTillUse(newTimeTillUse.toString());
             }
-         });
-        
-        
+        });
+
         // Instanciate the gui
         myGui = new CarGui(this, (Integer) this.ds.get("slotValue"));
         myGui.setVisible(true);
@@ -171,6 +177,10 @@ public class CarAgent extends GuiAgent {
             ds.put("timeTillUse", (Integer) ge.getParameter(1));
             System.out.println(getLocalName() + ": TIMENEEDED: " + ds.get("timeNeeded"));
             System.out.println(getLocalName() + ": TIMETILLUSE: " + ds.get("timeTillUse"));
+            if((Integer.parseInt(ds.get("timeNeeded").toString()) == 0) || (Integer.parseInt(ds.get("timeTillUse").toString()) == 0))
+                startFlag = false;
+            else
+                startFlag = true;
         }
         else if (command == UPDATE_SIGNAL) {
             sendInfo();
@@ -199,11 +209,11 @@ public class CarAgent extends GuiAgent {
     public void alertGui(String response) {
         myGui.alertResponse(response);
     }
-    
+
     public void alertTimeNeeded(String response) {
         myGui.alertNeeded(response);
     }
-    
+
     public void alertTimeTillUse(String response) {
         myGui.alertUse(response);
     }
