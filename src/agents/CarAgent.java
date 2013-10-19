@@ -85,9 +85,10 @@ public class CarAgent extends GuiAgent {
                 ACLMessage msg = receive();
                 if (msg != null) {
                     if (!msg.getSender().equals(getAID()))
-                        if (msg.getContent().contains("i need to charge")) {
-                            System.out.println(getLocalName() + " is changing");
-                        }
+                        if (msg.getContent().contains("you are charging")) 
+                            System.out.println(getLocalName() + " is charging");
+                        else if(msg.getContent().contains("sorry you will have to wait")) 
+                            System.out.println("not enough charge for " + getLocalName());
                         else if (msg.getContent().contains("what are your slot values")) {
                             System.out.println(super.myAgent.getLocalName()
                                     + ": MESSAGE RECEIVED: "
@@ -120,6 +121,8 @@ public class CarAgent extends GuiAgent {
         else if (command == STORE_SIGNAL) {
             ds.put("timeNeeded", (Integer) ge.getParameter(0));
             ds.put("timeTillUse", (Integer) ge.getParameter(1));
+            System.out.println(getLocalName() + ": TIMENEEDED: " + ds.get("timeNeeded"));
+            System.out.println(getLocalName() + ": TIMETILLUSE: " + ds.get("timeTillUse"));
         }
         else if (command == UPDATE_SIGNAL) {
             sendInfo();
