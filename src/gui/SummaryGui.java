@@ -9,12 +9,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
@@ -34,6 +36,8 @@ public class SummaryGui extends JFrame implements ActionListener{
     private JTextField msg;
     private JLabel slotPos;
     private JButton update, cancel, quit;
+    private Map<String, Integer> map;
+    private JTable slotOrder;
 
     private SummaryAgent myAgent;
 
@@ -123,8 +127,13 @@ public class SummaryGui extends JFrame implements ActionListener{
         }
     }
 
-    public void alertResponse(String s) {
-        slotPos.setText(s.toString());
+    @SuppressWarnings("unchecked")
+    public void alertResponse(Object o) {
+        if (o instanceof String)
+            msg.setText((String)o);
+        else if (o instanceof Map){
+            this.map = (Map<String, Integer>)o;
+        }
     }
 
     public void resetStatus() {

@@ -1,11 +1,12 @@
 package agents;
 
+import util.MapUtil;
 import gui.SummaryGui;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.DataStore;
 import jade.core.behaviours.SequentialBehaviour;
 import behaviours.AskSlotValues;
 import behaviours.GetInfo;
@@ -23,8 +24,6 @@ public class SummaryAgent extends GuiAgent {
 
     transient protected SummaryGui myGui;
 
-    private DataStore ds = new DataStore();
-
     static final int WAIT = -1;
     final static int EXIT_SIGNAL = 0;
     final static int UPDATE_SIGNAL = 65;
@@ -33,7 +32,8 @@ public class SummaryAgent extends GuiAgent {
     Integer slotInt;
 
     SequentialBehaviour summarySuperBehaviour = new SequentialBehaviour();
-    HashMap<String, Integer> hm;
+    
+    Map<String, Integer> map = new HashMap<String, Integer>();    
 
     protected void setup() {
 
@@ -54,7 +54,6 @@ public class SummaryAgent extends GuiAgent {
             e.printStackTrace();
         }
 
-        summarySuperBehaviour.setDataStore(ds);
         super.addBehaviour(summarySuperBehaviour);
         summarySuperBehaviour.addSubBehaviour(new GetInfo());
 
@@ -71,7 +70,11 @@ public class SummaryAgent extends GuiAgent {
                     if (msg.getContent().contains("my slot value is")) {
                         slotInt = Integer.parseInt(msg.getContent().substring(msg.getContent().lastIndexOf(" ") + 1));
                         System.out.println(msg.getSender().toString() + " has a slot value of " + slotInt);
-                        ds.put(msg.getSender(), slotInt);
+                        map.put(msg.getSender().toString(), slotInt);
+                        map = MapUtil.sortByValue(map);
+                        for(Map.Entry<String, Integer> entry : map.entrySet()) {
+                            System.out.println(entry.getKey() + ": " + entry.getValue());
+                        }
                     }
                 }
                 else
@@ -96,9 +99,9 @@ public class SummaryAgent extends GuiAgent {
         addBehaviour(new AskSlotValues());
     }
 
-    public void alertGui(String response) {
+    public void alertGui(Object response) {
         myGui.alertResponse(response);
-    }
+    }   
 
     void resetStatusGui() {
         myGui.resetStatus();
