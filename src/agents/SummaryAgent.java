@@ -20,7 +20,7 @@ import jade.lang.acl.ACLMessage;
 
 public class SummaryAgent extends GuiAgent {
 
-    private static final long serialVersionUID = -2481137036537418853L;
+    private static final long serialVersionUID = -37780069230983858L;
 
     transient protected SummaryGui myGui;
 
@@ -66,13 +66,12 @@ public class SummaryAgent extends GuiAgent {
         super.addBehaviour(new CyclicBehaviour(this) {
 
             private static final long serialVersionUID = 1274196283439389278L;
-
             public void action() {
                 ACLMessage msg = receive();
                 if (msg != null) {
                     if (msg.getContent().contains("my slot value is")) {
                         slotInt = Integer.parseInt(msg.getContent().substring(msg.getContent().lastIndexOf(" ") + 1));
-                        System.out.println(msg.getSender() + " has a slot value of " + slotInt);
+                        System.out.println(msg.getSender().toString() + " has a slot value of " + slotInt);
                         ds.put(msg.getSender(), slotInt);
                     }
                 }

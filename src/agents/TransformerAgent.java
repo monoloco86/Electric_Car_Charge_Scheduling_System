@@ -31,9 +31,9 @@ public class TransformerAgent extends GuiAgent {
     private Integer energyPerCar = new Integer(100);
     private Integer currentEnergy = new Integer(0);
     private Integer slotInt;
-    
+
     Random random = new Random();
-    
+
     SequentialBehaviour transformerSuperBehaviour = new SequentialBehaviour();
 
     protected void setup() {
@@ -66,25 +66,24 @@ public class TransformerAgent extends GuiAgent {
             public void action() {
                 ACLMessage msg = receive();
                 if (msg != null) {
-                    if (!msg.getSender().equals(getAID()))
-                        if (msg.getContent().contains("my slot value is")) {
-                            System.out.println(super.myAgent.getLocalName()
-                                    + ": MESSAGE RECEIVED: "
-                                    + msg.getContent() + " ---- From: "
-                                    + msg.getSender().getLocalName());
-                            slotInt = Integer.parseInt(msg.getContent().substring(
-                                    msg.getContent().lastIndexOf(" ") + 1));
-                            ACLMessage reply = msg.createReply();
-                            reply.setPerformative(ACLMessage.INFORM);
-                            if (slotInt > 0) {
-                                if ((energyPerCar + currentEnergy) > energyLimit)
-                                    reply.setContent("sorry you will have to wait");
-                                else
-                                    reply.setContent("you are charging");
+                    if (msg.getContent().contains("my slot value is")) {
+                        System.out.println(super.myAgent.getLocalName()
+                                + ": MESSAGE RECEIVED: "
+                                + msg.getContent() + " ---- From: "
+                                + msg.getSender().getLocalName());
+                        slotInt = Integer.parseInt(msg.getContent().substring(
+                                msg.getContent().lastIndexOf(" ") + 1));
+                        ACLMessage reply = msg.createReply();
+                        reply.setPerformative(ACLMessage.INFORM);
+                        if (slotInt > 0) {
+                            if ((energyPerCar + currentEnergy) > energyLimit)
+                                reply.setContent("sorry you will have to wait");
+                            else
+                                reply.setContent("you are charging");
 
-                                super.myAgent.send(reply);
-                            }
+                            super.myAgent.send(reply);
                         }
+                    }
                 }
                 else
                     block();
@@ -113,10 +112,11 @@ public class TransformerAgent extends GuiAgent {
 
     void randCharge() {
         energyLimit = random.nextInt(2000);
-        while(energyLimit < currentEnergy)
-            energyLimit = random.nextInt(2000);            
+        while (energyLimit < currentEnergy)
+            energyLimit = random.nextInt(2000);
+        System.out.println(getLocalName() + " has an energy limit of " + energyLimit);
     }
-    
+
     public void alertGui(String response) {
         myGui.alertResponse(response);
     }

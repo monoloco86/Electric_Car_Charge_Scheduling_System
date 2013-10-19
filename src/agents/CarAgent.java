@@ -98,10 +98,14 @@ public class CarAgent extends GuiAgent {
                             Integer slotValue = Integer.parseInt(ds.get("slotValue").toString());
                             ACLMessage reply = msg.createReply();
                             reply.setPerformative(ACLMessage.INFORM);
-                            if (slotValue != null)
+                            if (slotValue != null){
                                 reply.setContent("my slot value is " + slotValue);
-                            else
+                                System.out.println(getLocalName() + ": my slot value is " + slotValue);
+                            }
+                            else{
                                 reply.setContent("slotValue not set");
+                                System.out.println(getLocalName() + ": slotValue not set");
+                            }
                             super.myAgent.send(reply);
                         }
                 }
@@ -144,6 +148,7 @@ public class CarAgent extends GuiAgent {
     }
 
     void sendInfo() {
+        System.out.println("UPDATING");
         addBehaviour(new InformWorld(ds.get("timeNeeded"), ds.get("timeTillUse")));
     }
 
