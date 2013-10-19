@@ -1,3 +1,4 @@
+
 package agents;
 
 import gui.CarGui;
@@ -29,7 +30,7 @@ public class CarAgent extends GuiAgent {
     final static int UPDATE_SIGNAL = 65;
     final static int STORE_SIGNAL = 55;
     final static int ALT_SIGNAL = 70;
-    
+
     private int command = WAIT;
     Behaviour getInfo = new GetInfo();
     Behaviour getInfoAlt = new GetInfoAlt();
@@ -83,10 +84,10 @@ public class CarAgent extends GuiAgent {
             public void action() {
                 ACLMessage msg = receive();
                 if (msg != null) {
-                    if (!msg.getSender().equals(getAID()))
-                        if (msg.getContent().contains("you are charging")) 
+                    if (!msg.getSender().equals(getAID())) {
+                        if (msg.getContent().contains("you are charging"))
                             System.out.println(getLocalName() + " is charging");
-                        else if(msg.getContent().contains("sorry you will have to wait")) 
+                        else if (msg.getContent().contains("sorry you will have to wait"))
                             System.out.println("not enough charge for " + getLocalName());
                         else if (msg.getContent().contains("what are your slot values")) {
                             System.out.println(super.myAgent.getLocalName()
@@ -97,16 +98,20 @@ public class CarAgent extends GuiAgent {
                             Integer slotValue = Integer.parseInt(ds.get("slotValue").toString());
                             ACLMessage reply = msg.createReply();
                             reply.setPerformative(ACLMessage.INFORM);
-                            if (slotValue != null){
+                            if (slotValue != null) {
                                 reply.setContent("my slot value is " + slotValue);
-                                System.out.println(getLocalName() + ": my slot value is " + slotValue);
+                                System.out.println(getLocalName() + ": my slot value is "
+                                        + slotValue);
                             }
-                            else{
+                            else {
                                 reply.setContent("slotValue not set");
                                 System.out.println(getLocalName() + ": slotValue not set");
                             }
                             super.myAgent.send(reply);
                         }
+                    }
+                    else if (msg.getContent().contains("update gui slotvalue"))
+                        alertGui(ds.get("slotValue").toString());
                 }
                 else
                     block();

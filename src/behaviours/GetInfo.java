@@ -1,6 +1,7 @@
 
 package behaviours;
 
+import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
@@ -45,6 +46,14 @@ public class GetInfo extends CyclicBehaviour {
                     super.getParent().getDataStore().put("slotValue", newSlotValue);
                     System.out.println(super.myAgent.getLocalName() + " has a slot value of "
                             + super.getParent().getDataStore().get("slotValue").toString());
+                    
+                    ACLMessage msg = new ACLMessage( ACLMessage.INFORM );
+                    AID myAID = super.getAgent().getAID();
+                    msg.addReceiver(myAID);
+                    msg.setContent("update gui slotvalue");
+                    super.myAgent.send(msg);
+                    
+                    //super.getParent().alertGui(super.getParent().getDataStore().get("slotValue").toString());
                 }
             }
         } else
