@@ -1,7 +1,6 @@
 
 package agents;
 
-
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +37,7 @@ public class TransformerAgent extends GuiAgent {
     private Integer slotInt;
 
     private String keyString;
-    
+
     Map<String, Integer> map = new HashMap<String, Integer>();
 
     Random random = new Random();
@@ -84,29 +83,31 @@ public class TransformerAgent extends GuiAgent {
                                 msg.getContent().lastIndexOf(" ") + 1));
                         ACLMessage reply = msg.createReply();
                         reply.setPerformative(ACLMessage.INFORM);
+                        slotInt = Integer.parseInt(msg.getContent().substring(
+                                msg.getContent().lastIndexOf(" ") + 1));
                         map.put(msg.getSender().getLocalName(), slotInt);
-                        if(map.size() > 1)
+                        if (map.size() > 1)
                             map = sortByValues(map);
                         if ((energyPerCar + currentEnergy) > energyLimit) {
                             int count = 1;
                             for (Map.Entry<String, Integer> entry : map.entrySet()) {
                                 keyString = entry.getKey();
-                                if(count == map.size())
+                                if (count == map.size())
                                     map.remove(keyString);
                                 count++;
                             }
                             reply.setContent("sorry you will have to wait");
                         } else {
-                            currentEnergy += energyPerCar;
-                            reply.setContent("you are charging");
-                            myGui.alertCurrent(currentEnergy);
-                            slotInt = Integer.parseInt(msg.getContent().substring(
-                                    msg.getContent().lastIndexOf(" ") + 1));
-                            System.out.println(msg.getSender().getLocalName()
-                                    + " has a slot value of " + slotInt);
-                            for (Map.Entry<String, Integer> entry : map.entrySet()) {
-                                System.out.println("LOOPING");
-                                System.out.println(entry.getKey() + ": " + entry.getValue());
+                            if (!map.containsKey(msg.getSender().getLocalName())) {
+                                currentEnergy += energyPerCar;
+                                reply.setContent("you are charging");
+                                myGui.alertCurrent(currentEnergy);
+                                System.out.println(msg.getSender().getLocalName()
+                                        + " has a slot value of " + slotInt);
+                                for (Map.Entry<String, Integer> entry : map.entrySet()) {
+                                    System.out.println("LOOPING");
+                                    System.out.println(entry.getKey() + ": " + entry.getValue());
+                                }
                             }
                         }
                         alertGui(map);
@@ -179,17 +180,19 @@ public class TransformerAgent extends GuiAgent {
             myGui.dispose();
         }
     }
-    
+
     public static <K, V extends Comparable<V>> Map<K, V> sortByValues(final Map<K, V> map) {
-        Comparator<K> valueComparator =  new Comparator<K>() {
+        Comparator<K> valueComparator = new Comparator<K>() {
             public int compare(K k1, K k2) {
                 int compare = map.get(k2).compareTo(map.get(k1));
-                if (compare == 0) return 1;
-                else return compare;
+                if (compare == 0)
+                    return 1;
+                else
+                    return compare;
             }
         };
         Map<K, V> sortedByValues = new TreeMap<K, V>(valueComparator);
         sortedByValues.putAll(map);
         return sortedByValues;
-    }    
+    }
 }
