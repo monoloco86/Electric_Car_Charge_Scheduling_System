@@ -57,6 +57,7 @@ public class SummaryAgent extends GuiAgent {
             e.printStackTrace();
         }
 
+        setQueueSize(0);
         super.addBehaviour(summarySuperBehaviour);
         summarySuperBehaviour.addSubBehaviour(new GetInfo());
 

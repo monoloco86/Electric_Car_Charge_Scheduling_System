@@ -57,11 +57,6 @@ public class CarAgent extends GuiAgent {
         } catch (FIPAException e) {
             e.printStackTrace();
         }
-        /*
-         * Random randomTime = new Random(); Random randomCharge = new Random();
-         * Double timeTillUse = new Double(1000 * randomTime.nextDouble());
-         * Double chargeNeeded = new Double(500 * randomCharge.nextDouble());
-         */
 
         setQueueSize(0);
         

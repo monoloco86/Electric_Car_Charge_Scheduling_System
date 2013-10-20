@@ -63,6 +63,7 @@ public class TransformerAgent extends GuiAgent {
             e.printStackTrace();
         }
 
+        setQueueSize(0);
         // Instanciate the gui
         myGui = new TransformerGui(this, energyLimit);
         myGui.setVisible(true);
