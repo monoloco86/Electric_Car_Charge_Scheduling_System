@@ -63,6 +63,8 @@ public class CarAgent extends GuiAgent {
          * Double chargeNeeded = new Double(500 * randomCharge.nextDouble());
          */
 
+        setQueueSize(0);
+        
         Integer slotValue = new Integer(0);
         Integer timeNeeded = new Integer(10000);
         Integer timeTillUse = new Integer(10000);
@@ -220,7 +222,7 @@ public class CarAgent extends GuiAgent {
     }
     
     public void alertGuiSlot(String response) {
-        myGui.alertResponse(response);
+        myGui.alertSlot(response);
     }
 
     public void alertTimeNeeded(String response) {
