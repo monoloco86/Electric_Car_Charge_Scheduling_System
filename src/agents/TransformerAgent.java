@@ -131,9 +131,11 @@ public class TransformerAgent extends GuiAgent {
             System.exit(EXIT_SIGNAL);
         }
         else if (command == UPDATE_SIGNAL) {
+            System.out.println("UPDATING");
             sendInfo();
         }
         else if (command == RAND_SIGNAL) {
+            System.out.println("RANDOMING");
             randCharge();
         }
     }
