@@ -31,13 +31,14 @@ public class AskSlotValues extends OneShotBehaviour {
         if (result.length > 0) {
         	       	    	
             ACLMessage message = new ACLMessage(ACLMessage.INFORM);
-            for (DFAgentDescription agent : result) {
-                message.addReceiver(agent.getName());
-            }
             message.setContent("what are your slot values");
             
-            super.myAgent.send(message);   
-            System.out.println(super.getAgent().getLocalName() + " has sent the following: " + message.getContent().toString());        
+            for (DFAgentDescription agent : result) {
+                message.addReceiver(agent.getName());
+                System.out.println(super.getAgent().getLocalName() + " has sent the following: " + message.getContent().toString() + " to - " + agent.getName().getLocalName()); 
+            }
+            
+            super.myAgent.send(message);          
         }
         
     }
