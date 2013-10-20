@@ -1,4 +1,3 @@
-
 package behaviours;
 
 import jade.core.behaviours.CyclicBehaviour;
@@ -20,27 +19,28 @@ public class GetInfoAlt extends CyclicBehaviour {
                             + message.getSender().getLocalName());
                     String[] values = message.getContent().replaceAll("[\\D]", " ").trim()
                             .replaceAll(" +", " ").split(" ", 2);
-                    Integer senderChargeBy = new Integer(values[0]);
-                    Integer senderChargeTime = new Integer(values[1]);
-                    Integer myChargeBy = Integer.parseInt(super.getParent().getDataStore()
-                            .get("timeTillUse").toString());
+                    Integer senderChargeTime = new Integer(values[0]);
+                    Integer senderChargeNeeded = new Integer(values[1]);
+                    Integer myChargeNeeded = Integer.parseInt(super.getParent().getDataStore()
+                            .get("chargeNeeded").toString());
                     Integer myChargeTime = Integer.parseInt(super.getParent().getDataStore()
                             .get("timeNeeded").toString());
                     Integer slotValue = Integer.parseInt(super.getParent().getDataStore()
                             .get("slotValue").toString());
                     Integer newSlotValue = new Integer(slotValue);
-                    if (senderChargeBy == myChargeBy) {
-                        if (senderChargeTime == myChargeTime)
-                            newSlotValue = slotValue;
-                        else if (senderChargeTime < myChargeTime)
-                            newSlotValue = slotValue - 1;
-                        else
-                            newSlotValue = slotValue + 1;
+                    if (senderChargeNeeded == myChargeNeeded) {
+                    	if (senderChargeTime == myChargeTime)
+                    		newSlotValue = slotValue;
+                    	else if (senderChargeTime < myChargeTime)
+                    		newSlotValue = slotValue + 1;
+                    	else 
+                    		newSlotValue = slotValue - 1;
                     }
-                    else if (senderChargeBy < myChargeBy)
-                        newSlotValue = slotValue - 1;
+                    else if (senderChargeNeeded < myChargeNeeded)
+                    	newSlotValue = slotValue - 1;
                     else
-                        newSlotValue = slotValue + 1;
+                    	newSlotValue = slotValue + 1;
+
                     
                     super.getParent().getDataStore().put("slotValue", newSlotValue);
                     System.out.println(super.myAgent.getLocalName() + " has a slot value of "
