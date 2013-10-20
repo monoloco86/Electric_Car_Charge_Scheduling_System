@@ -1,3 +1,4 @@
+
 package agents;
 
 import gui.SummaryGui;
@@ -25,7 +26,7 @@ public class SummaryAgent extends GuiAgent {
     private static final long serialVersionUID = -37780069230983858L;
 
     transient protected SummaryGui myGui;
-    
+
     static final int WAIT = -1;
     final static int EXIT_SIGNAL = 0;
     final static int UPDATE_SIGNAL = 65;
@@ -34,8 +35,8 @@ public class SummaryAgent extends GuiAgent {
     Integer slotInt;
 
     SequentialBehaviour summarySuperBehaviour = new SequentialBehaviour();
-    
-    Map<String, Integer> map = new HashMap<String, Integer>();    
+
+    Map<String, Integer> map = new HashMap<String, Integer>();
 
     protected void setup() {
 
@@ -66,17 +67,22 @@ public class SummaryAgent extends GuiAgent {
         super.addBehaviour(new CyclicBehaviour(this) {
 
             private static final long serialVersionUID = 1274196283439389278L;
+
             public void action() {
                 ACLMessage msg = receive();
                 if (msg != null) {
-                    System.out.println(getLocalName() + " recieved: \"" + msg.getContent().toString() + "\" - from " + msg.getSender().getLocalName());
+                    System.out.println(getLocalName() + " recieved: \""
+                            + msg.getContent().toString() + "\" - from "
+                            + msg.getSender().getLocalName());
                     if (msg.getContent().contains("my slot value is")) {
-                        slotInt = Integer.parseInt(msg.getContent().substring(msg.getContent().lastIndexOf(" ") + 1));
-                        System.out.println(msg.getSender().getLocalName() + " has a slot value of " + slotInt);
+                        slotInt = Integer.parseInt(msg.getContent().substring(
+                                msg.getContent().lastIndexOf(" ") + 1));
+                        System.out.println(msg.getSender().getLocalName() + " has a slot value of "
+                                + slotInt);
                         map.put(msg.getSender().getLocalName(), slotInt);
-                        if(map.size() > 1)
+                        if (map.size() > 1)
                             map = sortByValues(map);
-                        for(Map.Entry<String, Integer> entry : map.entrySet()) {
+                        for (Map.Entry<String, Integer> entry : map.entrySet()) {
                             System.out.println("LOOPING");
                             System.out.println(entry.getKey() + ": " + entry.getValue());
                         }
@@ -108,8 +114,8 @@ public class SummaryAgent extends GuiAgent {
 
     public void alertGui(Object response) {
         myGui.alertResponse(response);
-    }   
-    
+    }
+
     void resetStatusGui() {
         myGui.resetStatus();
     }
@@ -128,17 +134,19 @@ public class SummaryAgent extends GuiAgent {
             myGui.dispose();
         }
     }
-    
+
     public static <K, V extends Comparable<V>> Map<K, V> sortByValues(final Map<K, V> map) {
-        Comparator<K> valueComparator =  new Comparator<K>() {
+        Comparator<K> valueComparator = new Comparator<K>() {
             public int compare(K k1, K k2) {
                 int compare = map.get(k2).compareTo(map.get(k1));
-                if (compare == 0) return 1;
-                else return compare;
+                if (compare == 0)
+                    return 1;
+                else
+                    return compare;
             }
         };
         Map<K, V> sortedByValues = new TreeMap<K, V>(valueComparator);
         sortedByValues.putAll(map);
         return sortedByValues;
-    }    
+    }
 }

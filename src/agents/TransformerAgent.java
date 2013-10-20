@@ -72,9 +72,12 @@ public class TransformerAgent extends GuiAgent {
             private static final long serialVersionUID = 3947683897113338999L;
 
             public void action() {
+                
                 ACLMessage msg = receive();
                 if (msg != null) {
-                    System.out.println(getLocalName() + " recieved: \"" + msg.getContent().toString() + "\" - from " + msg.getSender().getLocalName());
+                    System.out.println(getLocalName() + " recieved: \""
+                            + msg.getContent().toString() + "\" - from "
+                            + msg.getSender().getLocalName());
                     if (msg.getContent().contains("my slot value is")) {
                         System.out.println(super.myAgent.getLocalName()
                                 + ": MESSAGE RECEIVED: "

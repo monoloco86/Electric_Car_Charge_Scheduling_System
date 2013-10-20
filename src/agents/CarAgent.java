@@ -128,17 +128,20 @@ public class CarAgent extends GuiAgent {
             private static final long serialVersionUID = -5221452177252946977L;
 
             public void action() {
+                
                 ACLMessage msg = receive();
                 if (msg != null) {
-                    System.out.println(getLocalName() + " recieved: \"" + msg.getContent().toString() + "\" - from " + msg.getSender().getLocalName());
+                    System.out.println(getLocalName() + " recieved: \""
+                            + msg.getContent().toString() + "\" - from "
+                            + msg.getSender().getLocalName());
                     if (!msg.getSender().equals(getAID())) {
-                        if (msg.getContent().contains("you are charging")){
+                        if (msg.getContent().contains("you are charging")) {
                             startFlag = true;
                             System.out.println(getLocalName() + " is charging");
                         }
-                        else if (msg.getContent().contains("sorry you will have to wait")){
+                        else if (msg.getContent().contains("sorry you will have to wait")) {
                             System.out.println("not enough charge for " + getLocalName());
-                            }
+                        }
                         else if (msg.getContent().contains("what are your slot values")) {
                             System.out.println(super.myAgent.getLocalName()
                                     + ": MESSAGE RECEIVED: "
@@ -160,8 +163,8 @@ public class CarAgent extends GuiAgent {
                             super.myAgent.send(reply);
                         }
                     }
-                    else if (msg.getContent().contains("update gui slotvalue")){
-                        alertGui(ds.get("slotValue").toString());
+                    else if (msg.getContent().contains("update gui slotvalue")) {
+                        alertGuiSlot(ds.get("slotValue").toString());
                     }
                 }
                 else
@@ -179,6 +182,7 @@ public class CarAgent extends GuiAgent {
         }
         else if (command == STORE_SIGNAL) {
             System.out.println("STORING");
+            alertGui("Storing");                       
             ds.put("timeNeeded", (Integer) ge.getParameter(0));
             ds.put("timeTillUse", (Integer) ge.getParameter(1));
             System.out.println(getLocalName() + ": TIMENEEDED: " + ds.get("timeNeeded"));
@@ -186,10 +190,12 @@ public class CarAgent extends GuiAgent {
         }
         else if (command == UPDATE_SIGNAL) {
             System.out.println("UPDATING");
+            alertGui("Updating");            
             sendInfo();
         }
         else if (command == ALT_SIGNAL) {
             System.out.println("CHANGING ALGORITHM");
+            alertGui("Changing Algorithm");                        
             changeAlgorithms();
         }
     }
@@ -210,6 +216,10 @@ public class CarAgent extends GuiAgent {
     }
 
     public void alertGui(String response) {
+        myGui.alertResponse(response);
+    }
+    
+    public void alertGuiSlot(String response) {
         myGui.alertResponse(response);
     }
 

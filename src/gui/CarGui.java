@@ -1,3 +1,4 @@
+
 package gui;
 
 import jade.gui.GuiEvent;
@@ -20,10 +21,10 @@ import javax.swing.border.EmptyBorder;
 
 import agents.CarAgent;
 
-public class CarGui extends JFrame implements ActionListener{
+public class CarGui extends JFrame implements ActionListener {
 
     private static final long serialVersionUID = 434802339658676247L;
-    
+
     final static int IN_PROCESS = 0;
     final static int WAIT_CONFIRM = 1;
     final static int IN_LINE = 2;
@@ -31,7 +32,7 @@ public class CarGui extends JFrame implements ActionListener{
     final static int UPDATE_SIGNAL = 65;
     final static int STORE_SIGNAL = 55;
     final static int ALT_SIGNAL = 70;
-    
+
     private int status = IN_PROCESS;
     private JTextField msg, timeTillUse, timeNeeded;
     private JLabel slotPos, tillUseFrame, timeNeededFrame;
@@ -150,18 +151,18 @@ public class CarGui extends JFrame implements ActionListener{
             }
         }
         else if (ae.getSource() == update) {
-            GuiEvent ge = new GuiEvent(this, UPDATE_SIGNAL); 
-            myAgent.postGuiEvent(ge);   
-         }
+            GuiEvent ge = new GuiEvent(this, UPDATE_SIGNAL);
+            myAgent.postGuiEvent(ge);
+        }
         else if (ae.getSource() == cancel && status != IN_LINE) {
             status = IN_PROCESS;
             cancel.setEnabled(false);
             msg.setText("Operation canceled!");
-         }
+        }
         else if (ae.getSource() == alt) {
-            GuiEvent ge = new GuiEvent(this, ALT_SIGNAL); 
-            myAgent.postGuiEvent(ge);   
-         }
+            GuiEvent ge = new GuiEvent(this, ALT_SIGNAL);
+            myAgent.postGuiEvent(ge);
+        }
     }
 
     void alertInfo(String s) {
@@ -184,13 +185,17 @@ public class CarGui extends JFrame implements ActionListener{
     }
 
     public void alertResponse(String s) {
-        slotPos.setText("Slot position: " + s.toString());
+        msg.setText(s.toString());
     }
     
+    public void alertSlot(String s) {
+        slotPos.setText("Slot position: " + s.toString());
+    }
+
     public void alertNeeded(String s) {
         timeNeededFrame.setText("Time needed to charge: " + s.toString());
     }
-    
+
     public void alertUse(String s) {
         tillUseFrame.setText("Time till use: " + s.toString());
     }

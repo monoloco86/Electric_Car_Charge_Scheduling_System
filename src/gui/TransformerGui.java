@@ -1,3 +1,4 @@
+
 package gui;
 
 import jade.gui.GuiEvent;
@@ -26,10 +27,10 @@ import javax.swing.table.TableModel;
 
 import agents.TransformerAgent;
 
-public class TransformerGui extends JFrame implements ActionListener{
+public class TransformerGui extends JFrame implements ActionListener {
 
     private static final long serialVersionUID = 4202866304780272910L;
-    
+
     final static int IN_PROCESS = 0;
     final static int WAIT_CONFIRM = 1;
     final static int IN_LINE = 2;
@@ -68,8 +69,7 @@ public class TransformerGui extends JFrame implements ActionListener{
         msg.setHorizontalAlignment(JTextField.CENTER);
         panel.add(pane, BorderLayout.NORTH);
         pane = new JPanel();
-        pane.setLayout(new BorderLayout(5,0));
-
+        pane.setLayout(new BorderLayout(5, 0));
 
         TableModel model = new TableDataModel(map);
         slotOrder = new JTable(model);
@@ -78,7 +78,7 @@ public class TransformerGui extends JFrame implements ActionListener{
         panel.add(pane, BorderLayout.WEST);
         pane = new JPanel();
         pane.setLayout(new BorderLayout(5, 0));
-        
+
         JPanel p = new JPanel();
         p.setLayout(new BorderLayout(0, 0));
         p.add(energyLimit = new JLabel("Energy Limit: " + limit), BorderLayout.NORTH);
@@ -157,18 +157,18 @@ public class TransformerGui extends JFrame implements ActionListener{
     @SuppressWarnings("unchecked")
     public void alertResponse(Object o) {
         if (o instanceof String)
-            msg.setText((String)o);
-        else if (o instanceof Map){
+            msg.setText((String) o);
+        else if (o instanceof Map) {
             TableDataModel model = new TableDataModel((Map<String, Integer>) o);
             slotOrder.setModel(model);
             slotOrder.updateUI();
         }
     }
-    
+
     public void alertLimit(Integer i) {
         energyLimit.setText("Current Energy: " + i.toString());
     }
-    
+
     public void alertCurrent(Integer i) {
         currentEnergy.setText("Energy Limit: " + i.toString());
     }
@@ -177,7 +177,7 @@ public class TransformerGui extends JFrame implements ActionListener{
 
         status = IN_PROCESS;
     }
-    
+
     private class TableDataModel extends AbstractTableModel {
 
         private static final long serialVersionUID = -9046466617697329165L;
