@@ -162,11 +162,11 @@ public class TransformerGui extends JFrame implements ActionListener {
     }
 
     public void alertLimit(Integer i) {
-        energyLimit.setText("Current Energy: " + i.toString());
+        energyLimit.setText("Energy Limit: " + i.toString());
     }
 
     public void alertCurrent(Integer i) {
-        currentEnergy.setText("Energy Limit: " + i.toString());
+        currentEnergy.setText("Current Energy: " + i.toString());
     }
 
     private class TableDataModel extends AbstractTableModel {

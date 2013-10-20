@@ -17,9 +17,7 @@ public class Initialiser extends Agent {
         /*
          * Deploy Sniffer agent.
          */
-        // super.addBehaviour(new
-        // Initialise("Sniffer","jade.tools.sniffer.Sniffer",new Object[]{ "*"
-        // }));
+//         super.addBehaviour(new Initialise("Sniffer","jade.tools.sniffer.Sniffer",new Object[]{ "*"}));
 
         /*
          * Deploy Car agents.
