@@ -74,6 +74,7 @@ public class TransformerAgent extends GuiAgent {
             public void action() {
                 ACLMessage msg = receive();
                 if (msg != null) {
+                    System.out.println(getLocalName() + " recieved: \"" + msg.getContent().toString() + "\" - from " + msg.getSender().getLocalName());
                     if (msg.getContent().contains("my slot value is")) {
                         System.out.println(super.myAgent.getLocalName()
                                 + ": MESSAGE RECEIVED: "

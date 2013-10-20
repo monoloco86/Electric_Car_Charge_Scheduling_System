@@ -69,6 +69,7 @@ public class SummaryAgent extends GuiAgent {
             public void action() {
                 ACLMessage msg = receive();
                 if (msg != null) {
+                    System.out.println(getLocalName() + " recieved: \"" + msg.getContent().toString() + "\" - from " + msg.getSender().getLocalName());
                     if (msg.getContent().contains("my slot value is")) {
                         slotInt = Integer.parseInt(msg.getContent().substring(msg.getContent().lastIndexOf(" ") + 1));
                         System.out.println(msg.getSender().getLocalName() + " has a slot value of " + slotInt);

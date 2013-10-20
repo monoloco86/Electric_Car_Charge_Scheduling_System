@@ -14,6 +14,7 @@ public class AskSlotValues extends OneShotBehaviour {
         
     @Override
     public void action() {
+        System.out.println("ASKING FOR SLOT VALUES");
         setDataStore(super.getDataStore());
         ServiceDescription serviceDescription = new ServiceDescription();
         serviceDescription.setType("CarAgent");
@@ -35,7 +36,8 @@ public class AskSlotValues extends OneShotBehaviour {
             }
             message.setContent("what are your slot values");
             
-            super.myAgent.send(message);            
+            super.myAgent.send(message);   
+            System.out.println(super.getAgent().getLocalName() + " has sent the following: " + message.getContent().toString());        
         }
         
     }

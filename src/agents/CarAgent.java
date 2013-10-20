@@ -111,7 +111,7 @@ public class CarAgent extends GuiAgent {
                             super.myAgent.send(message);
                         }
                     }
-                    System.out.println("I WOKE UP");
+                    System.out.println("CHARGING");
                     alertTimeNeeded(newTimeNeeded.toString());
                     alertTimeTillUse(newTimeTillUse.toString());
                     block(1000);
@@ -130,13 +130,15 @@ public class CarAgent extends GuiAgent {
             public void action() {
                 ACLMessage msg = receive();
                 if (msg != null) {
+                    System.out.println(getLocalName() + " recieved: \"" + msg.getContent().toString() + "\" - from " + msg.getSender().getLocalName());
                     if (!msg.getSender().equals(getAID())) {
                         if (msg.getContent().contains("you are charging")){
                             startFlag = true;
                             System.out.println(getLocalName() + " is charging");
                         }
-                        else if (msg.getContent().contains("sorry you will have to wait"))
+                        else if (msg.getContent().contains("sorry you will have to wait")){
                             System.out.println("not enough charge for " + getLocalName());
+                            }
                         else if (msg.getContent().contains("what are your slot values")) {
                             System.out.println(super.myAgent.getLocalName()
                                     + ": MESSAGE RECEIVED: "
@@ -158,8 +160,9 @@ public class CarAgent extends GuiAgent {
                             super.myAgent.send(reply);
                         }
                     }
-                    else if (msg.getContent().contains("update gui slotvalue"))
+                    else if (msg.getContent().contains("update gui slotvalue")){
                         alertGui(ds.get("slotValue").toString());
+                    }
                 }
                 else
                     block();

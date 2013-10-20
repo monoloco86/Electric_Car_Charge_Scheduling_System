@@ -52,6 +52,7 @@ public class GetInfo extends CyclicBehaviour {
                     msg.addReceiver(myAID);
                     msg.setContent("update gui slotvalue");
                     super.myAgent.send(msg);
+                    System.out.println(myAID.getLocalName() + " has sent the following: " + msg.getContent().toString());
                     
                     //super.getParent().alertGui(super.getParent().getDataStore().get("slotValue").toString());
                 }
