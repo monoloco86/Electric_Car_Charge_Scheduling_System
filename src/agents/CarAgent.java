@@ -173,6 +173,7 @@ public class CarAgent extends GuiAgent {
             System.exit(EXIT_SIGNAL);
         }
         else if (command == STORE_SIGNAL) {
+            System.out.println("STORING");
             ds.put("timeNeeded", (Integer) ge.getParameter(0));
             ds.put("timeTillUse", (Integer) ge.getParameter(1));
             System.out.println(getLocalName() + ": TIMENEEDED: " + ds.get("timeNeeded"));
@@ -183,9 +184,11 @@ public class CarAgent extends GuiAgent {
                 startFlag = true;
         }
         else if (command == UPDATE_SIGNAL) {
+            System.out.println("UPDATING");
             sendInfo();
         }
         else if (command == ALT_SIGNAL) {
+            System.out.println("CHANGING ALGORITHM");
             changeAlgorithms();
         }
     }
@@ -202,7 +205,6 @@ public class CarAgent extends GuiAgent {
     }
 
     void sendInfo() {
-        System.out.println("UPDATING");
         addBehaviour(new InformWorld(ds.get("timeNeeded"), ds.get("timeTillUse")));
     }
 

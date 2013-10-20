@@ -96,6 +96,7 @@ public class SummaryAgent extends GuiAgent {
             System.exit(EXIT_SIGNAL);
         }
         else if (command == UPDATE_SIGNAL) {
+            System.out.println("UPDATING");
             updateInfo();
         }
     }
