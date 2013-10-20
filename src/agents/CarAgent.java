@@ -131,8 +131,10 @@ public class CarAgent extends GuiAgent {
                 ACLMessage msg = receive();
                 if (msg != null) {
                     if (!msg.getSender().equals(getAID())) {
-                        if (msg.getContent().contains("you are charging"))
+                        if (msg.getContent().contains("you are charging")){
+                            startFlag = true;
                             System.out.println(getLocalName() + " is charging");
+                        }
                         else if (msg.getContent().contains("sorry you will have to wait"))
                             System.out.println("not enough charge for " + getLocalName());
                         else if (msg.getContent().contains("what are your slot values")) {
@@ -178,10 +180,6 @@ public class CarAgent extends GuiAgent {
             ds.put("timeTillUse", (Integer) ge.getParameter(1));
             System.out.println(getLocalName() + ": TIMENEEDED: " + ds.get("timeNeeded"));
             System.out.println(getLocalName() + ": TIMETILLUSE: " + ds.get("timeTillUse"));
-            if((Integer.parseInt(ds.get("timeNeeded").toString()) == 0) || (Integer.parseInt(ds.get("timeTillUse").toString()) == 0))
-                startFlag = false;
-            else
-                startFlag = true;
         }
         else if (command == UPDATE_SIGNAL) {
             System.out.println("UPDATING");
