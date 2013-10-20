@@ -117,10 +117,6 @@ public class SummaryAgent extends GuiAgent {
         myGui.alertResponse(response);
     }
 
-    void resetStatusGui() {
-        myGui.resetStatus();
-    }
-
     protected void takeDown() {
         /*
          * Deregister this agent with DF.

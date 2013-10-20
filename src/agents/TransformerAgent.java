@@ -169,10 +169,6 @@ public class TransformerAgent extends GuiAgent {
         myGui.alertCurrent(response);
     }
 
-    void resetStatusGui() {
-        myGui.resetStatus();
-    }
-
     protected void takeDown() {
         /*
          * Deregister this agent with DF.

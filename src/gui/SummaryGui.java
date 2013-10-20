@@ -31,13 +31,9 @@ public class SummaryGui extends JFrame implements ActionListener {
 
     private static final long serialVersionUID = -4294488323535790208L;
 
-    final static int IN_PROCESS = 0;
-    final static int WAIT_CONFIRM = 1;
-    final static int IN_LINE = 2;
     final static int EXIT_SIGNAL = 0;
     final static int UPDATE_SIGNAL = 65;
     final static int ALT_SIGNAL = 70;
-    int status = IN_PROCESS;
     private JTextField msg;
     private JButton update, cancel, quit;
     private JTable slotOrder;
@@ -145,12 +141,7 @@ public class SummaryGui extends JFrame implements ActionListener {
             slotOrder.updateUI();
         }
     }
-
-    public void resetStatus() {
-
-        status = IN_PROCESS;
-    }
-
+    
     private class TableDataModel extends AbstractTableModel {
 
         private static final long serialVersionUID = 7015333148116529992L;
@@ -190,6 +181,5 @@ public class SummaryGui extends JFrame implements ActionListener {
                 return data.get(keys[row]);
             }
         }
-
     }
 }

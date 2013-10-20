@@ -25,15 +25,11 @@ public class CarGui extends JFrame implements ActionListener {
 
     private static final long serialVersionUID = 434802339658676247L;
 
-    final static int IN_PROCESS = 0;
-    final static int WAIT_CONFIRM = 1;
-    final static int IN_LINE = 2;
     final static int EXIT_SIGNAL = 0;
     final static int UPDATE_SIGNAL = 65;
     final static int STORE_SIGNAL = 55;
     final static int ALT_SIGNAL = 70;
 
-    private int status = IN_PROCESS;
     private JTextField msg, timeTillUse, timeNeeded;
     private JLabel slotPos, tillUseFrame, timeNeededFrame;
     private JButton store, update, alt, cancel, quit;
@@ -154,8 +150,7 @@ public class CarGui extends JFrame implements ActionListener {
             GuiEvent ge = new GuiEvent(this, UPDATE_SIGNAL);
             myAgent.postGuiEvent(ge);
         }
-        else if (ae.getSource() == cancel && status != IN_LINE) {
-            status = IN_PROCESS;
+        else if (ae.getSource() == cancel) {
             cancel.setEnabled(false);
             msg.setText("Operation canceled!");
         }
@@ -198,10 +193,5 @@ public class CarGui extends JFrame implements ActionListener {
 
     public void alertUse(String s) {
         tillUseFrame.setText("Time till use: " + s.toString());
-    }
-
-    public void resetStatus() {
-
-        status = IN_PROCESS;
     }
 }

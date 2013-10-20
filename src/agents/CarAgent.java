@@ -228,10 +228,6 @@ public class CarAgent extends GuiAgent {
         myGui.alertUse(response);
     }
 
-    void resetStatusGui() {
-        myGui.resetStatus();
-    }
-
     protected void takeDown() {
         /*
          * Deregister this agent with DF.

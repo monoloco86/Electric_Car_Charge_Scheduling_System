@@ -31,13 +31,9 @@ public class TransformerGui extends JFrame implements ActionListener {
 
     private static final long serialVersionUID = 4202866304780272910L;
 
-    final static int IN_PROCESS = 0;
-    final static int WAIT_CONFIRM = 1;
-    final static int IN_LINE = 2;
     final static int EXIT_SIGNAL = 0;
     final static int UPDATE_SIGNAL = 65;
     final static int RAND_SIGNAL = 70;
-    int status = IN_PROCESS;
     private JTextField msg;
     private JLabel energyLimit, currentEnergy;
     private JButton update, rand, cancel, quit;
@@ -171,11 +167,6 @@ public class TransformerGui extends JFrame implements ActionListener {
 
     public void alertCurrent(Integer i) {
         currentEnergy.setText("Energy Limit: " + i.toString());
-    }
-
-    public void resetStatus() {
-
-        status = IN_PROCESS;
     }
 
     private class TableDataModel extends AbstractTableModel {
