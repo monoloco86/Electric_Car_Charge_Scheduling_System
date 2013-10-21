@@ -155,6 +155,11 @@ public class TransformerGui extends JFrame implements ActionListener {
         if (o instanceof String)
             msg.setText((String) o);
         else if (o instanceof Map) {
+			System.out.println("Inside GUI");
+			for (Map.Entry<String, Integer> entry : ((Map<String, Integer>) o).entrySet()) {
+				System.out.println("LOOPING");
+				System.out.println(entry.getKey() + ": " + entry.getValue());
+			}
             TableDataModel model = new TableDataModel((Map<String, Integer>) o);
             slotOrder.setModel(model);
             slotOrder.updateUI();
