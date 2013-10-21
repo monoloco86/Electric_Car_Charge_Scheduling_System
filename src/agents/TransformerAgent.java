@@ -194,6 +194,7 @@ public class TransformerAgent extends GuiAgent {
     }
 
     void sendInfo() {
+        map.clear();
         addBehaviour(new AskSlotValues());
     }
 
