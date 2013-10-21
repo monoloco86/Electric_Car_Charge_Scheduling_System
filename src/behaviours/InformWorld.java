@@ -43,6 +43,7 @@ public class InformWorld extends OneShotBehaviour {
             }
             message.setContent("i need to charge by " + this.timeTillUse + ", it will take me " + this.timeNeeded);
             
+            message.removeReceiver(super.myAgent.getAID());
             super.myAgent.send(message);            
         }
         

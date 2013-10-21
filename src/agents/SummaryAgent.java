@@ -29,8 +29,8 @@ public class SummaryAgent extends GuiAgent {
 
     static final int WAIT = -1;
     final static int EXIT_SIGNAL = 0;
-    final static int UPDATE_SIGNAL = 65;
-    final static int ALT_SIGNAL = 70;
+    final static int UPDATE_SIGNAL = 66;
+    final static int ALT_SIGNAL = 71;
     private int command = WAIT;
     Integer slotInt;
 

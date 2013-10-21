@@ -32,8 +32,8 @@ public class TransformerGui extends JFrame implements ActionListener {
     private static final long serialVersionUID = 4202866304780272910L;
 
     final static int EXIT_SIGNAL = 0;
-    final static int UPDATE_SIGNAL = 65;
-    final static int RAND_SIGNAL = 70;
+    final static int UPDATE_SIGNAL = 67;
+    final static int RAND_SIGNAL = 72;
     private JTextField msg;
     private JLabel energyLimit, currentEnergy;
     private JButton update, rand, cancel, quit;

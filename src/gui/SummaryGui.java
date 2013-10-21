@@ -32,8 +32,8 @@ public class SummaryGui extends JFrame implements ActionListener {
     private static final long serialVersionUID = -4294488323535790208L;
 
     final static int EXIT_SIGNAL = 0;
-    final static int UPDATE_SIGNAL = 65;
-    final static int ALT_SIGNAL = 70;
+    final static int UPDATE_SIGNAL = 66;
+    final static int ALT_SIGNAL = 71;
     private JTextField msg;
     private JButton update, cancel, quit;
     private JTable slotOrder;

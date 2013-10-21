@@ -27,8 +27,8 @@ public class TransformerAgent extends GuiAgent {
 
     static final int WAIT = -1;
     final static int EXIT_SIGNAL = 0;
-    final static int UPDATE_SIGNAL = 65;
-    final static int RAND_SIGNAL = 70;
+    final static int UPDATE_SIGNAL = 67;
+    final static int RAND_SIGNAL = 72;
     private int command = WAIT;
 
     private Integer energyLimit = new Integer(1000);
