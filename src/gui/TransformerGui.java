@@ -162,7 +162,7 @@ public class TransformerGui extends JFrame implements ActionListener {
 			}
             TableDataModel model = new TableDataModel((Map<String, Integer>) o);
             slotOrder.setModel(model);
-            slotOrder.updateUI();
+            slotOrder.repaint();
         }
     }
 
@@ -180,8 +180,8 @@ public class TransformerGui extends JFrame implements ActionListener {
         private Map<String, Integer> data;
         private String[] keys;
 
-        public TableDataModel(Map<String, Integer> map) {
-            data = map;
+        public TableDataModel(Map<String, Integer> tmap) {
+            data = tmap;
             keys = data.keySet().toArray(new String[data.size()]);
         }
 
@@ -208,9 +208,11 @@ public class TransformerGui extends JFrame implements ActionListener {
         public Object getValueAt(int row, int col) {
             if (col == 0) {
                 return keys[row];
-            } else {
+            } else if(col == 1){
                 return data.get(keys[row]);
-            }
+            } else
+                return null;
+                
         }
 
     }

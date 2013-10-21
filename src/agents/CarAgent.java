@@ -82,6 +82,8 @@ public class CarAgent extends GuiAgent {
                     ds.put("timeNeeded", newTimeNeeded);
                     ds.put("timeTillUse", newTimeTillUse);
                     if ((newTimeNeeded == 0) || (newTimeTillUse == 0)) {
+                        ds.put("timeNeeded", 0);
+                        ds.put("timeTillUse", 0);
                         ServiceDescription serviceDescription = new ServiceDescription();
                         serviceDescription.setType("TransformerAgent");
                         DFAgentDescription agentDescription = new DFAgentDescription();

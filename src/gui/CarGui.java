@@ -61,7 +61,7 @@ public class CarGui extends JFrame implements ActionListener {
 
         JPanel p = new JPanel();
         p.setLayout(new BorderLayout(0, 0));
-        p.add(slotPos = new JLabel("Slot position: " + slotValue), BorderLayout.NORTH);
+        p.add(slotPos = new JLabel("Slot value: " + slotValue), BorderLayout.NORTH);
         p.add(tillUseFrame = new JLabel("Time till use: " + 0), BorderLayout.CENTER);
         p.add(timeNeededFrame = new JLabel("Time needed to charge: " + 0), BorderLayout.SOUTH);
 
@@ -184,7 +184,7 @@ public class CarGui extends JFrame implements ActionListener {
     }
     
     public void alertSlot(String s) {
-        slotPos.setText("Slot position: " + s.toString());
+        slotPos.setText("Slot value: " + s.toString());
     }
 
     public void alertNeeded(String s) {

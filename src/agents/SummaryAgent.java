@@ -83,7 +83,7 @@ public class SummaryAgent extends GuiAgent {
                         }
                         
                         if (map.size() > 1)
-                            map = sortByValues(map);
+                            map = (Map<String, Integer>)sortByValues(map);
                         
                         System.out.println("After sort"); 
                         for (Map.Entry<String, Integer> entry : map.entrySet()) {
@@ -113,6 +113,7 @@ public class SummaryAgent extends GuiAgent {
     }
 
     void updateInfo() {
+        map.clear();
         addBehaviour(new AskSlotValues());
     }
 

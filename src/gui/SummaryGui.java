@@ -142,7 +142,7 @@ public class SummaryGui extends JFrame implements ActionListener {
 
 			TableDataModel model = new TableDataModel((Map<String, Integer>) o);
 			slotOrder.setModel(model);
-			slotOrder.updateUI();
+			slotOrder.repaint();
 		}
 	}
 
@@ -153,8 +153,8 @@ public class SummaryGui extends JFrame implements ActionListener {
 		private Map<String, Integer> data;
 		private String[] keys;
 
-		public TableDataModel(Map<String, Integer> map) {
-			data = map;
+		public TableDataModel(Map<String, Integer> tmap) {
+			data = tmap;
 			keys = data.keySet().toArray(new String[data.size()]);
 		}
 
