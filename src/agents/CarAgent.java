@@ -125,7 +125,6 @@ public class CarAgent extends GuiAgent {
             private static final long serialVersionUID = -5221452177252946977L;
 
             public void action() {
-                System.out.println(getCurQueueSize());
                 ACLMessage msg = receive();
                 if (msg != null) {
                     System.out.println(getLocalName() + " recieved: \""
@@ -138,6 +137,7 @@ public class CarAgent extends GuiAgent {
                         }
                         if (msg.getContent().contains("sorry you will have to wait")) {
                             System.out.println("not enough charge for " + getLocalName());
+                            startFlag = false;
                         }
                         if (msg.getContent().contains("what are your slot values")) {
                             System.out.println(super.myAgent.getLocalName()
@@ -164,8 +164,8 @@ public class CarAgent extends GuiAgent {
                         alertGuiSlot(ds.get("slotValue").toString());
                     }
                 }
-                else
-                    block();
+//                else
+//                    block();
             }
         });
     }

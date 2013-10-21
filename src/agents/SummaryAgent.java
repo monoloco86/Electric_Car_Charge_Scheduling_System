@@ -8,9 +8,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.SequentialBehaviour;
 import behaviours.AskSlotValues;
-import behaviours.GetInfo;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -34,8 +32,6 @@ public class SummaryAgent extends GuiAgent {
     private int command = WAIT;
     Integer slotInt;
 
-    SequentialBehaviour summarySuperBehaviour = new SequentialBehaviour();
-
     Map<String, Integer> map = new HashMap<String, Integer>();
 
     protected void setup() {
@@ -58,8 +54,6 @@ public class SummaryAgent extends GuiAgent {
         }
 
         setQueueSize(0);
-        super.addBehaviour(summarySuperBehaviour);
-        summarySuperBehaviour.addSubBehaviour(new GetInfo());
 
         // Instanciate the gui
         myGui = new SummaryGui(this);
@@ -80,9 +74,18 @@ public class SummaryAgent extends GuiAgent {
                                 msg.getContent().lastIndexOf(" ") + 1));
                         System.out.println(msg.getSender().getLocalName() + " has a slot value of "
                                 + slotInt);
-                        map.put(msg.getSender().getLocalName(), slotInt);
+                        map.put(msg.getSender().getLocalName().toString(), slotInt);
+                        
+                        System.out.println("Before sort");
+                        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+                            System.out.println("LOOPING");
+                            System.out.println(entry.getKey() + ": " + entry.getValue());
+                        }
+                        
                         if (map.size() > 1)
                             map = sortByValues(map);
+                        
+                        System.out.println("After sort"); 
                         for (Map.Entry<String, Integer> entry : map.entrySet()) {
                             System.out.println("LOOPING");
                             System.out.println(entry.getKey() + ": " + entry.getValue());

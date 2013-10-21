@@ -47,15 +47,18 @@ public class GetInfo extends CyclicBehaviour {
                     System.out.println(super.myAgent.getLocalName() + " has a slot value of "
                             + super.getParent().getDataStore().get("slotValue").toString());
 
-                    ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-                    AID myAID = super.getAgent().getAID();
-                    msg.addReceiver(myAID);
-                    msg.setContent("update gui slotvalue");
-                    super.myAgent.send(msg);
-                    System.out.println(myAID.getLocalName() + " has sent the following: "
-                            + msg.getContent().toString());
+                   
                 }
             }
+            ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+            AID myAID = super.getAgent().getAID();
+            msg.addReceiver(myAID);
+            
+            msg.setContent("update gui slotvalue");
+            
+            super.myAgent.send(msg);
+            System.out.println(myAID.getLocalName() + " has sent the following: "
+                    + msg.getContent().toString());
         } else
             block();
     }
