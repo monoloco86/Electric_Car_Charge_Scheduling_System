@@ -183,14 +183,14 @@ public class CarAgent extends GuiAgent {
                         Integer myChargeTime = Integer.parseInt(ds.get("timeNeeded").toString());
                         Integer mySlotValue = Integer.parseInt(ds.get("slotValue").toString());
                         Integer newSlotValue = new Integer(mySlotValue);
-                        if (senderChargeBy == myChargeBy) {
-                            if (senderChargeTime == myChargeTime)
+                        if (senderChargeTime == myChargeTime) {
+                            if (senderChargeBy == myChargeBy)
                                 newSlotValue = mySlotValue;
-                            else if (senderChargeTime < myChargeTime)
+                            else if (senderChargeBy < myChargeBy)
                                 newSlotValue = mySlotValue - 1;
                             else
                                 newSlotValue = mySlotValue + 1;
-                        } else if (senderChargeBy < myChargeBy)
+                        } else if (senderChargeTime < myChargeTime)
                             newSlotValue = mySlotValue - 1;
                         else
                             newSlotValue = mySlotValue + 1;
