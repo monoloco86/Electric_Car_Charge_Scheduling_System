@@ -44,7 +44,7 @@ public class TransformerGui extends JFrame implements ActionListener {
 
     public TransformerGui(TransformerAgent transformer, Integer limit) {
 
-        myAgent = transformer;
+    	myAgent = transformer;
 
         setTitle(myAgent.getLocalName());
 
@@ -69,6 +69,8 @@ public class TransformerGui extends JFrame implements ActionListener {
 
         TableModel model = new TableDataModel(map);
         slotOrder = new JTable(model);
+        slotOrder.setModel(model);
+        slotOrder.repaint();
         pane.add(new JScrollPane(slotOrder), BorderLayout.WEST);
         pane.setSize(20, 30);
         panel.add(pane, BorderLayout.WEST);
@@ -160,7 +162,13 @@ public class TransformerGui extends JFrame implements ActionListener {
 				System.out.println("LOOPING");
 				System.out.println(entry.getKey() + ": " + entry.getValue());
 			}
-            TableDataModel model = new TableDataModel((Map<String, Integer>) o);
+            TableModel model = new TableDataModel((Map<String, Integer>) o);
+            if(((Map) o).size() > 1){
+            	System.out.println("Value 0,0 is " + model.getValueAt(0, 0));
+            	System.out.println("Value 0,1 is " + model.getValueAt(0, 1));
+            	System.out.println("Value 1,0 is " + model.getValueAt(1, 0));
+            	System.out.println("Value 1,1 is " + model.getValueAt(1, 1));
+            }
             slotOrder.setModel(model);
             slotOrder.repaint();
         }
@@ -183,6 +191,12 @@ public class TransformerGui extends JFrame implements ActionListener {
         public TableDataModel(Map<String, Integer> tmap) {
             data = tmap;
             keys = data.keySet().toArray(new String[data.size()]);
+
+			System.out.println("Inside model");
+			for (Map.Entry<String, Integer> entry : ((Map<String, Integer>) data).entrySet()) {
+				System.out.println("LOOPING");
+				System.out.println(entry.getKey() + ": " + entry.getValue());
+			}
         }
 
         @Override
