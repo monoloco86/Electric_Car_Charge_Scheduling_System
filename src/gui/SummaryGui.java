@@ -152,11 +152,9 @@ public class SummaryGui extends JFrame implements ActionListener {
 		private static final long serialVersionUID = 7015333148116529992L;
 
 		private Map<String, Integer> data;
-		private String[] keys;
 
 		public TableDataModel(Map<String, Integer> tmap) {
 			data = tmap;
-			keys = data.keySet().toArray(new String[data.size()]);
 		}
 
 		@Override
