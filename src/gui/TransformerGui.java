@@ -163,7 +163,7 @@ public class TransformerGui extends JFrame implements ActionListener {
 				System.out.println(entry.getKey() + ": " + entry.getValue());
 			}
             TableModel model = new TableDataModel((Map<String, Integer>) o);
-            if(((Map) o).size() > 1){
+            if(((Map<String, Integer>) o).size() > 1){
             	System.out.println("Value 0,0 is " + model.getValueAt(0, 0));
             	System.out.println("Value 0,1 is " + model.getValueAt(0, 1));
             	System.out.println("Value 1,0 is " + model.getValueAt(1, 0));
@@ -196,6 +196,7 @@ public class TransformerGui extends JFrame implements ActionListener {
 			for (Map.Entry<String, Integer> entry : ((Map<String, Integer>) data).entrySet()) {
 				System.out.println("LOOPING");
 				System.out.println(entry.getKey() + ": " + entry.getValue());
+				data.put(entry.getKey(), entry.getValue());
 			}
         }
 
@@ -223,7 +224,20 @@ public class TransformerGui extends JFrame implements ActionListener {
             if (col == 0) {
                 return keys[row];
             } else if(col == 1){
-                return data.get(keys[row]);
+            	Integer value = new Integer(0);
+            	Integer rowVal = new Integer(row);
+            	int count = 0;
+            	String key = "CarAgent"+rowVal.toString();
+            	System.out.println("Inside getValues");
+			for (Map.Entry<String, Integer> entry : ((Map<String, Integer>) data).entrySet()) {
+				System.out.println("LOOPING");
+				System.out.println(entry.getKey() + ": " + entry.getValue());
+				if(count == row)
+					value = entry.getValue();
+				count++;
+			}
+			return value;
+              //  return data.get(keys[row]);
             } else
                 return null;
                 
