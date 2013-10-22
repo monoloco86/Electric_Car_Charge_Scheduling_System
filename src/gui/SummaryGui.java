@@ -183,9 +183,7 @@ public class SummaryGui extends JFrame implements ActionListener {
 	                return keys[row];
 	            } else if(col == 1){
 	            	Integer value = new Integer(0);
-	            	Integer rowVal = new Integer(row);
 	            	int count = 0;
-	            	String key = "CarAgent"+rowVal.toString();
 	            	System.out.println("Inside getValues");
 				for (Map.Entry<String, Integer> entry : ((Map<String, Integer>) data).entrySet()) {
 					System.out.println("LOOPING");
