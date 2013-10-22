@@ -135,7 +135,8 @@ public class SummaryGui extends JFrame implements ActionListener {
 			msg.setText((String) o);
 		else if (o instanceof Map) {
 			System.out.println("Inside GUI");
-			for (Map.Entry<String, Integer> entry : ((Map<String, Integer>) o).entrySet()) {
+			for (Map.Entry<String, Integer> entry : ((Map<String, Integer>) o)
+					.entrySet()) {
 				System.out.println("LOOPING");
 				System.out.println(entry.getKey() + ": " + entry.getValue());
 			}
@@ -177,26 +178,28 @@ public class SummaryGui extends JFrame implements ActionListener {
 			return data.size();
 		}
 
-		 @Override
-	        public Object getValueAt(int row, int col) {
-	            if (col == 0) {
-	                return keys[row];
-	            } else if(col == 1){
-	            	Integer value = new Integer(0);
-	            	int count = 0;
-	            	System.out.println("Inside getValues");
-				for (Map.Entry<String, Integer> entry : ((Map<String, Integer>) data).entrySet()) {
+		@Override
+		public Object getValueAt(int row, int col) {
+			if (col == 0) {
+				return "CarAgent" + row;
+			} else if (col == 1) {
+				Integer value = new Integer(0);
+				int count = 0;
+				System.out.println("Inside getValues");
+				for (Map.Entry<String, Integer> entry : ((Map<String, Integer>) data)
+						.entrySet()) {
 					System.out.println("LOOPING");
-					System.out.println(entry.getKey() + ": " + entry.getValue());
-					if(count == row)
+					System.out
+							.println(entry.getKey() + ": " + entry.getValue());
+					if (count == row)
 						value = entry.getValue();
 					count++;
 				}
 				return value;
-	              //  return data.get(keys[row]);
-	            } else
-	                return null;
-	                
-	        }
+				// return data.get(keys[row]);
+			} else
+				return null;
+
+		}
 	}
 }
