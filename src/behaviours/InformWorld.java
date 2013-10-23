@@ -13,10 +13,12 @@ public class InformWorld extends OneShotBehaviour {
 
 	String timeTillUse;
 	String timeNeeded;
+	String slotValue;
 
-	public InformWorld(Object timeNeeded, Object timeTillUse) {
+	public InformWorld(Object timeNeeded, Object timeTillUse, Object slotValue) {
 		this.timeNeeded = timeNeeded.toString();
 		this.timeTillUse = timeTillUse.toString();
+		this.slotValue = slotValue.toString();
 	}
 
 	@Override
@@ -42,7 +44,8 @@ public class InformWorld extends OneShotBehaviour {
 				message.addReceiver(agent.getName());
 			}
 			message.setContent("i need to charge by " + this.timeTillUse
-					+ ", it will take me " + this.timeNeeded);
+					+ ", it will take me " + this.timeNeeded +
+					", my slotValue is " + this.slotValue);
 
 			message.removeReceiver(super.myAgent.getAID());
 			super.myAgent.send(message);
