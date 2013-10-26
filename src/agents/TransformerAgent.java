@@ -106,9 +106,9 @@ public class TransformerAgent extends GuiAgent {
                         if ((energyPerCar + currentEnergy) > energyLimit && map.size() > 0) {
                             System.out.println("NOT ENOUGH ENERGY");
 
-                            Entry<String, Integer> min = null;
+                            Entry<String, Integer> max = null;
                             for (Map.Entry<String, Integer> entry : map.entrySet()) {
-                                if (min == null || min.getValue() > entry.getValue()) {
+                                if (max == null || max.getValue() < entry.getValue()) {
                                     keyString = entry.getKey();
                                 }
                             }
@@ -174,6 +174,8 @@ public class TransformerAgent extends GuiAgent {
                                     msg.getSender().getLocalName().toString())) {
                                 System.out.println("Removing " + entry.getKey());
                                 map.remove(entry.getKey());
+                                currentEnergy -= energyPerCar;
+                                myGui.alertCurrent(currentEnergy);
                                 for (Map.Entry<String, Integer> entry2 : map
                                         .entrySet()) {
                                     System.out.println("LOOPING");
