@@ -1,4 +1,3 @@
-
 package agents;
 
 import gui.CarGui;
@@ -14,298 +13,353 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
 import jade.lang.acl.ACLMessage;
+import java.util.Random;
 
 public class CarAgent extends GuiAgent {
 
-    private static final long serialVersionUID = -2481137036537418853L;
+	private static final long serialVersionUID = -2481137036537418853L;
 
-    transient protected CarGui myGui;
+	transient protected CarGui myGui;
 
-    private DataStore ds = new DataStore();
+	private DataStore ds = new DataStore();
 
-    static final int WAIT = -1;
-    final static int EXIT_SIGNAL = 0;
-    final static int UPDATE_SIGNAL = 65;
-    final static int STORE_SIGNAL = 55;
-    final static int ALT_SIGNAL = 70;
+	static final int WAIT = -1;
+	final static int EXIT_SIGNAL = 0;
+	final static int UPDATE_SIGNAL = 65;
+	final static int STORE_SIGNAL = 55;
+	final static int ALT_SIGNAL = 70;
 
-    private int command = WAIT;
-    private boolean startFlag = false;
-    private boolean altFlag = false;
+	private int command = WAIT;
+	private boolean startFlag = false;
+	private boolean altFlag = false;
 
-    ParallelBehaviour carSuperBehaviour = new ParallelBehaviour();
+	ParallelBehaviour carSuperBehaviour = new ParallelBehaviour();
 
-    protected void setup() {
+	protected void setup() {
 
-        /*
-         * Register this agent with DF.
-         */
-        ServiceDescription serviceDescription = new ServiceDescription();
-        serviceDescription.setType("CarAgent");
-        serviceDescription.setName(super.getLocalName());
+		/*
+		 * Register this agent with DF.
+		 */
+		ServiceDescription serviceDescription = new ServiceDescription();
+		serviceDescription.setType("CarAgent");
+		serviceDescription.setName(super.getLocalName());
 
-        DFAgentDescription agentDescription = new DFAgentDescription();
-        agentDescription.setName(super.getAID());
-        agentDescription.addServices(serviceDescription);
+		DFAgentDescription agentDescription = new DFAgentDescription();
+		agentDescription.setName(super.getAID());
+		agentDescription.addServices(serviceDescription);
 
-        try {
-            DFService.register(this, agentDescription);
-        } catch (FIPAException e) {
-            e.printStackTrace();
-        }
+		try {
+			DFService.register(this, agentDescription);
+		} catch (FIPAException e) {
+			e.printStackTrace();
+		}
 
-        setQueueSize(0);
+		setQueueSize(0);
 
-        Integer slotValue = new Integer(0);
-        Integer timeNeeded = new Integer(999999);
-        Integer timeTillUse = new Integer(999999);
+		Integer slotValue = new Integer(0);
+		Integer timeNeeded = new Integer(999999);
+		Integer timeTillUse = new Integer(999999);
 
-        ds.put("slotValue", slotValue);
-        ds.put("timeNeeded", timeNeeded);
-        ds.put("timeTillUse", timeTillUse);
+		ds.put("slotValue", slotValue);
+		ds.put("timeNeeded", timeNeeded);
+		ds.put("timeTillUse", timeTillUse);
 
-        carSuperBehaviour.setDataStore(ds);
-        super.addBehaviour(carSuperBehaviour);
+		carSuperBehaviour.setDataStore(ds);
+		super.addBehaviour(carSuperBehaviour);
 
-        carSuperBehaviour.addSubBehaviour(new CyclicBehaviour(this) {
+		carSuperBehaviour.addSubBehaviour(new CyclicBehaviour(this) {
 
-            private static final long serialVersionUID = 908550917934326392L;
+			private static final long serialVersionUID = 908550917934326392L;
 
-            @Override
-            public void action() {
+			@Override
+			public void action() {
 
-                if (startFlag) {
-                    Integer newTimeNeeded = Integer.parseInt(ds.get(
-                            "timeNeeded").toString()) - 1;
-                    Integer newTimeTillUse = Integer.parseInt(ds.get(
-                            "timeTillUse").toString()) - 1;
-                    ds.put("timeNeeded", newTimeNeeded);
-                    ds.put("timeTillUse", newTimeTillUse);
-                    if ((newTimeNeeded == 0) || (newTimeTillUse == 0)) {
-                        ds.put("timeNeeded", 0);
-                        ds.put("timeTillUse", 0);
-                        ServiceDescription serviceDescription = new ServiceDescription();
-                        serviceDescription.setType("TransformerAgent");
-                        DFAgentDescription agentDescription = new DFAgentDescription();
-                        agentDescription.addServices(serviceDescription);
+				if (startFlag) {
+					Integer newTimeNeeded = Integer.parseInt(ds.get(
+							"timeNeeded").toString()) - 1;
+					Integer newTimeTillUse = Integer.parseInt(ds.get(
+							"timeTillUse").toString()) - 1;
+					ds.put("timeNeeded", newTimeNeeded);
+					ds.put("timeTillUse", newTimeTillUse);
+					if ((newTimeNeeded == 0) || (newTimeTillUse == 0)) {
+						ds.put("timeNeeded", 0);
+						ds.put("timeTillUse", 0);
+						ServiceDescription serviceDescription = new ServiceDescription();
+						serviceDescription.setType("TransformerAgent");
+						DFAgentDescription agentDescription = new DFAgentDescription();
+						agentDescription.addServices(serviceDescription);
 
-                        DFAgentDescription[] result = new DFAgentDescription[0];
-                        try {
-                            result = DFService.search(super.myAgent,
-                                    agentDescription);
-                        } catch (FIPAException e) {
-                            e.printStackTrace();
-                        }
+						DFAgentDescription[] result = new DFAgentDescription[0];
+						try {
+							result = DFService.search(super.myAgent,
+									agentDescription);
+						} catch (FIPAException e) {
+							e.printStackTrace();
+						}
 
-                        if (result.length > 0) {
+						if (result.length > 0) {
 
-                            ACLMessage message = new ACLMessage(
-                                    ACLMessage.INFORM);
-                            for (DFAgentDescription agent : result) {
-                                message.addReceiver(agent.getName());
-                            }
-                            message.setContent("you can remove me");
-                            startFlag = false;
-                            super.myAgent.send(message);
-                        }
-                    }
-                    System.out.println("CHARGING");
-                    alertTimeNeeded(newTimeNeeded.toString());
-                    alertTimeTillUse(newTimeTillUse.toString());
-                    block(1000);
-                }
-            }
-        });
+							ACLMessage message = new ACLMessage(
+									ACLMessage.INFORM);
+							for (DFAgentDescription agent : result) {
+								message.addReceiver(agent.getName());
+							}
+							message.setContent("you can remove me");
+							startFlag = false;
+							super.myAgent.send(message);
+						}
+					}
+					System.out.println("CHARGING");
+					alertTimeNeeded(newTimeNeeded.toString());
+					alertTimeTillUse(newTimeTillUse.toString());
+					block(1000);
+				}
+			}
+		});
 
-        // Instanciate the gui
-        myGui = new CarGui(this, (Integer) this.ds.get("slotValue"));
-        myGui.setVisible(true);
+		// Instanciate the gui
+		myGui = new CarGui(this, (Integer) this.ds.get("slotValue"));
+		myGui.setVisible(true);
 
-        super.addBehaviour(new CyclicBehaviour(this) {
+		super.addBehaviour(new CyclicBehaviour(this) {
 
-            private static final long serialVersionUID = -5221452177252946977L;
+			private static final long serialVersionUID = -5221452177252946977L;
 
-            public void action() {
-                ACLMessage msg = receive();
-                if (msg != null) {
-                    System.out.println(getLocalName() + " recieved: \""
-                            + msg.getContent().toString() + "\" - from "
-                            + msg.getSender().getLocalName());
+			public void action() {
+				ACLMessage msg = receive();
+				if (msg != null) {
+					if (msg.getContent() != null) {
 
-                    if (msg.getContent().contains("change algorithm")){
-                        altFlag = !altFlag;                        
-                    }
-                    
-                    // ALGORITHM 1
-                    if (msg.getContent().contains("i need to charge") && !altFlag) {
-                        System.out.println("Running Original Algorithm - altFlag = " + altFlag);
-                        System.out.println(super.myAgent.getLocalName()
-                                + ": MESSAGE RECEIVED: " + msg.getContent()
-                                + " ---- From: " + msg.getSender().getLocalName());
-                        String[] values = msg.getContent().replaceAll("[\\D]", " ")
-                                .trim().replaceAll(" +", " ").split(" ", 2);
-                        Integer senderChargeBy = new Integer(values[0]);
-                        Integer senderChargeTime = new Integer(values[1]);
-                        Integer myChargeBy = Integer.parseInt(ds.get("timeTillUse").toString());
-                        Integer myChargeTime = Integer.parseInt(ds.get("timeNeeded").toString());
-                        Integer mySlotValue = Integer.parseInt(ds.get("slotValue").toString());
-                        Integer newSlotValue = new Integer(mySlotValue);
-                        if (senderChargeBy == myChargeBy) {
-                            if (senderChargeTime == myChargeTime)
-                                newSlotValue = mySlotValue;
-                            else if (senderChargeTime < myChargeTime)
-                                newSlotValue = mySlotValue - 1;
-                            else
-                                newSlotValue = mySlotValue + 1;
-                        } else if (senderChargeBy < myChargeBy)
-                            newSlotValue = mySlotValue - 1;
-                        else
-                            newSlotValue = mySlotValue + 1;
+						System.out.println(getLocalName() + " recieved: \""
+								+ msg.getContent().toString() + "\" - from "
+								+ msg.getSender().getLocalName());
 
-                        ds.put("slotValue", newSlotValue);
-                        System.out.println(super.myAgent.getLocalName() + " has a slot value of "
-                                + ds.get("slotValue").toString());
+						if (msg.getContent().contains("change algorithm")) {
+							altFlag = !altFlag;
+						}
 
-                        alertGuiSlot(ds.get("slotValue").toString());
-                    }
+						// ALGORITHM 1
+						if (msg.getContent().contains("i need to charge")
+								&& !altFlag) {
+							System.out
+									.println("Running Original Algorithm - altFlag = "
+											+ altFlag);
+							System.out.println(super.myAgent.getLocalName()
+									+ ": MESSAGE RECEIVED: " + msg.getContent()
+									+ " ---- From: "
+									+ msg.getSender().getLocalName());
+							String[] values = msg.getContent()
+									.replaceAll("[\\D]", " ").trim()
+									.replaceAll(" +", " ").trim()
+									.replaceAll(" +", " ").split(" ", 3);
+							Integer senderChargeBy = new Integer(values[0]);
+							Integer senderChargeTime = new Integer(values[1]);
+							Integer senderSlotValue = new Integer(values[2]);
+							Integer myChargeBy = Integer.parseInt(ds.get(
+									"timeTillUse").toString());
+							Integer myChargeTime = Integer.parseInt(ds.get(
+									"timeNeeded").toString());
+							Integer mySlotValue = Integer.parseInt(ds.get(
+									"slotValue").toString());
+							Integer newSlotValue = new Integer(mySlotValue);
+							if (senderChargeBy == myChargeBy) {
+								if (senderChargeTime == myChargeTime)
+									newSlotValue = mySlotValue;
+								else if (senderChargeTime < myChargeTime)
+									newSlotValue = mySlotValue - 1;
+								else
+									newSlotValue = mySlotValue + 1;
+							} else if (senderChargeBy < myChargeBy)
+								newSlotValue = mySlotValue - 1;
+							else
+								newSlotValue = mySlotValue + 1;
 
-                    // ALGORITHM 2
-                    if (msg.getContent().contains("i need to charge") && altFlag) {
-                        System.out.println("Running Alternative Algorithm - altFlag = " + altFlag);
-                        System.out.println(super.myAgent.getLocalName()
-                                + ": MESSAGE RECEIVED: " + msg.getContent()
-                                + " ---- From: " + msg.getSender().getLocalName());
-                        String[] values = msg.getContent().replaceAll("[\\D]", " ")
-                                .trim().replaceAll(" +", " ").split(" ", 2);
-                        Integer senderChargeBy = new Integer(values[0]);
-                        Integer senderChargeTime = new Integer(values[1]);
-                        Integer myChargeBy = Integer.parseInt(ds.get("timeTillUse").toString());
-                        Integer myChargeTime = Integer.parseInt(ds.get("timeNeeded").toString());
-                        Integer mySlotValue = Integer.parseInt(ds.get("slotValue").toString());
-                        Integer newSlotValue = new Integer(mySlotValue);
-                        if (senderChargeTime == myChargeTime) {
-                            if (senderChargeBy == myChargeBy)
-                                newSlotValue = mySlotValue;
-                            else if (senderChargeBy < myChargeBy)
-                                newSlotValue = mySlotValue - 1;
-                            else
-                                newSlotValue = mySlotValue + 1;
-                        } else if (senderChargeTime < myChargeTime)
-                            newSlotValue = mySlotValue - 1;
-                        else
-                            newSlotValue = mySlotValue + 1;
+							ds.put("slotValue", newSlotValue);
+							System.out.println(super.myAgent.getLocalName()
+									+ " has a slot value of "
+									+ ds.get("slotValue").toString());
 
-                        ds.put("slotValue", newSlotValue);
-                        System.out.println(super.myAgent.getLocalName() + " has a slot value of "
-                                + ds.get("slotValue").toString());
+							alertGuiSlot(ds.get("slotValue").toString());
+						}
 
-                        alertGuiSlot(ds.get("slotValue").toString());
-                    }
+						// ALGORITHM 2
+						if (msg.getContent().contains("i need to charge")
+								&& altFlag) {
+							System.out
+									.println("Running Alternative Algorithm - altFlag = "
+											+ altFlag);
+							System.out.println(super.myAgent.getLocalName()
+									+ ": MESSAGE RECEIVED: " + msg.getContent()
+									+ " ---- From: "
+									+ msg.getSender().getLocalName());
+							String[] values = msg.getContent()
+									.replaceAll("[\\D]", " ").trim()
+									.replaceAll(" +", " ").trim()
+									.replaceAll(" +", " ").split(" ", 3);
+							Integer senderChargeBy = new Integer(values[0]);
+							Integer senderChargeTime = new Integer(values[1]);
+							Integer senderSlotValue = new Integer(values[2]);
+							Integer myChargeBy = Integer.parseInt(ds.get(
+									"timeTillUse").toString());
+							Integer myChargeTime = Integer.parseInt(ds.get(
+									"timeNeeded").toString());
+							Integer mySlotValue = Integer.parseInt(ds.get(
+									"slotValue").toString());
+							Integer newSlotValue = new Integer(mySlotValue);
+							if (senderChargeTime == myChargeTime) {
+								if (senderChargeBy == myChargeBy)
+									newSlotValue = mySlotValue;
+								else if (senderChargeBy < myChargeBy)
+									newSlotValue = mySlotValue - 1;
+								else
+									newSlotValue = mySlotValue + 1;
+							} else if (senderChargeTime < myChargeTime)
+								newSlotValue = mySlotValue - 1;
+							else
+								newSlotValue = mySlotValue + 1;
+							
+							int highSlotValue;
+							int slotValueVector = 0;
+		                	int directedChange = 0;
+							int error = 0;
+							int lowestError = 100;
+		                	Random randomNum = new Random();
+		                	int randomChange = randomNum.nextInt(3) - 2;
+							//int iteration = 0;
+							if (newSlotValue < senderSlotValue)
+								highSlotValue = senderSlotValue;
+							else
+								highSlotValue = newSlotValue;
+							//if (iteration < 5){
+							slotValueVector = highSlotValue + randomChange + directedChange;
+							// iteration ++;
+							if (error <= lowestError){
+								highSlotValue = slotValueVector;
+								directedChange = directedChange + 2*slotValueVector;
+								lowestError = error;
+							}else if(error >= lowestError){
+								slotValueVector = highSlotValue - randomChange + directedChange;
+								}
+							newSlotValue = slotValueVector;
+							//}
+							
+							
+							
 
-                    if (msg.getContent().contains("you are charging")) {
-                        startFlag = true;
-                        System.out.println(getLocalName() + " is charging");
-                    }
-                    if (msg.getContent()
-                            .contains("sorry you will have to wait")) {
-                        System.out.println("not enough charge for "
-                                + getLocalName());
-                        startFlag = false;
-                    }
-                    if (msg.getContent().contains("what are your slot values")) {
-                        System.out.println(super.myAgent.getLocalName()
-                                + ": MESSAGE RECEIVED: " + msg.getContent()
-                                + " ---- From: "
-                                + msg.getSender().getLocalName());
+							ds.put("slotValue", newSlotValue);
+							System.out.println(super.myAgent.getLocalName()
+									+ " has a slot value of "
+									+ ds.get("slotValue").toString());
 
-                        Integer slotValue = Integer.parseInt(ds
-                                .get("slotValue").toString());
-                        ACLMessage reply = msg.createReply();
-                        reply.setPerformative(ACLMessage.INFORM);
-                        if (slotValue != null) {
-                            reply.setContent("my slot value is " + slotValue);
-                            System.out.println(getLocalName()
-                                    + ": my slot value is " + slotValue);
-                        } else {
-                            reply.setContent("slotValue not set");
-                            System.out.println(getLocalName()
-                                    + ": slotValue not set");
-                        }
-                        super.myAgent.send(reply);
-                    }
-                }
-                else
-                    block();
-            }
-        });
-    }
+							alertGuiSlot(ds.get("slotValue").toString());
+						}
 
-    protected void onGuiEvent(GuiEvent ge) {
-        command = ge.getType();
-        if (command == EXIT_SIGNAL) {
-            alertGui("Bye!");
-            doDelete();
-            System.exit(EXIT_SIGNAL);
-        } else if (command == STORE_SIGNAL) {
-            System.out.println("STORING");
-            alertGui("Storing");
-            ds.put("timeNeeded", (Integer) ge.getParameter(0));
-            ds.put("timeTillUse", (Integer) ge.getParameter(1));
-            System.out.println(getLocalName() + ": TIMENEEDED: "
-                    + ds.get("timeNeeded"));
-            System.out.println(getLocalName() + ": TIMETILLUSE: "
-                    + ds.get("timeTillUse"));
-        } else if (command == UPDATE_SIGNAL) {
-            System.out.println("UPDATING");
-            alertGui("Updating");
-            sendInfo();
-        } else if (command == ALT_SIGNAL) {
-            System.out.println("CHANGING ALGORITHM");
-            if (altFlag)
-                alertGui("Changing to Orignal");
-            else
-                alertGui("Changing to Alternative");
-            changeAlgorithms();
-        }
-    }
+						if (msg.getContent().contains("you are charging")) {
+							startFlag = true;
+							System.out.println(getLocalName() + " is charging");
+						}
+						if (msg.getContent().contains(
+								"sorry you will have to wait")) {
+							System.out.println("not enough charge for "
+									+ getLocalName());
+							startFlag = false;
+						}
+						if (msg.getContent().contains(
+								"what are your slot values")) {
+							System.out.println(super.myAgent.getLocalName()
+									+ ": MESSAGE RECEIVED: " + msg.getContent()
+									+ " ---- From: "
+									+ msg.getSender().getLocalName());
 
-    void changeAlgorithms() {
-        addBehaviour(new ChangeAlgorithm());
-    }
+							Integer slotValue = Integer.parseInt(ds.get(
+									"slotValue").toString());
+							ACLMessage reply = msg.createReply();
+							reply.setPerformative(ACLMessage.INFORM);
+							if (slotValue != null) {
+								reply.setContent("my slot value is "
+										+ slotValue);
+								System.out.println(getLocalName()
+										+ ": my slot value is " + slotValue);
+							} else {
+								reply.setContent("slotValue not set");
+								System.out.println(getLocalName()
+										+ ": slotValue not set");
+							}
+							super.myAgent.send(reply);
+						}
+					}
+				} else
+					block();
+			}
+		});
+	}
 
-    void sendInfo() {
-        addBehaviour(new InformWorld(ds.get("timeNeeded"),
-                ds.get("timeTillUse")));
-    }
+	protected void onGuiEvent(GuiEvent ge) {
+		command = ge.getType();
+		if (command == EXIT_SIGNAL) {
+			alertGui("Bye!");
+			doDelete();
+			System.exit(EXIT_SIGNAL);
+		} else if (command == STORE_SIGNAL) {
+			System.out.println("STORING");
+			alertGui("Storing");
+			ds.put("timeNeeded", (Integer) ge.getParameter(0));
+			ds.put("timeTillUse", (Integer) ge.getParameter(1));
+			System.out.println(getLocalName() + ": TIMENEEDED: "
+					+ ds.get("timeNeeded"));
+			System.out.println(getLocalName() + ": TIMETILLUSE: "
+					+ ds.get("timeTillUse"));
+		} else if (command == UPDATE_SIGNAL) {
+			System.out.println("UPDATING");
+			alertGui("Updating");
+			sendInfo();
+		} else if (command == ALT_SIGNAL) {
+			System.out.println("CHANGING ALGORITHM");
+			if (altFlag)
+				alertGui("Changing to Orignal");
+			else
+				alertGui("Changing to Alternative");
+			changeAlgorithms();
+		}
+	}
 
-    public void alertGui(String response) {
-        myGui.alertResponse(response);
-    }
+	void changeAlgorithms() {
+		addBehaviour(new ChangeAlgorithm());
+	}
 
-    public void alertGuiSlot(String response) {
-        myGui.alertSlot(response);
-    }
+	void sendInfo() {
+		addBehaviour(new InformWorld(ds.get("timeNeeded"),
+				ds.get("timeTillUse"),ds.get("slotValue")));
+	}
 
-    public void alertTimeNeeded(String response) {
-        myGui.alertNeeded(response);
-    }
+	public void alertGui(String response) {
+		myGui.alertResponse(response);
+	}
 
-    public void alertTimeTillUse(String response) {
-        myGui.alertUse(response);
-    }
+	public void alertGuiSlot(String response) {
+		myGui.alertSlot(response);
+	}
 
-    protected void takeDown() {
-        /*
-         * Deregister this agent with DF.
-         */
-        try {
-            DFService.deregister(this);
-        } catch (FIPAException e) {
-            e.printStackTrace();
-        }
-        if (myGui != null) {
-            myGui.setVisible(false);
-            myGui.dispose();
-        }
-    }
+	public void alertTimeNeeded(String response) {
+		myGui.alertNeeded(response);
+	}
+
+	public void alertTimeTillUse(String response) {
+		myGui.alertUse(response);
+	}
+
+	protected void takeDown() {
+		/*
+		 * Deregister this agent with DF.
+		 */
+		try {
+			DFService.deregister(this);
+		} catch (FIPAException e) {
+			e.printStackTrace();
+		}
+		if (myGui != null) {
+			myGui.setVisible(false);
+			myGui.dispose();
+		}
+	}
 }

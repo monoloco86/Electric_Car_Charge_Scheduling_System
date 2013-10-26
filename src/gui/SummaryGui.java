@@ -135,7 +135,8 @@ public class SummaryGui extends JFrame implements ActionListener {
 			msg.setText((String) o);
 		else if (o instanceof Map) {
 			System.out.println("Inside GUI");
-			for (Map.Entry<String, Integer> entry : ((Map<String, Integer>) o).entrySet()) {
+			for (Map.Entry<String, Integer> entry : ((Map<String, Integer>) o)
+					.entrySet()) {
 				System.out.println("LOOPING");
 				System.out.println(entry.getKey() + ": " + entry.getValue());
 			}
@@ -151,11 +152,9 @@ public class SummaryGui extends JFrame implements ActionListener {
 		private static final long serialVersionUID = 7015333148116529992L;
 
 		private Map<String, Integer> data;
-		private String[] keys;
 
 		public TableDataModel(Map<String, Integer> tmap) {
 			data = tmap;
-			keys = data.keySet().toArray(new String[data.size()]);
 		}
 
 		@Override
@@ -180,10 +179,25 @@ public class SummaryGui extends JFrame implements ActionListener {
 		@Override
 		public Object getValueAt(int row, int col) {
 			if (col == 0) {
-				return keys[row];
-			} else {
-				return data.get(keys[row]);
-			}
+				return "CarAgent" + row;
+			} else if (col == 1) {
+				Integer value = new Integer(0);
+				int count = 0;
+				System.out.println("Inside getValues");
+				for (Map.Entry<String, Integer> entry : ((Map<String, Integer>) data)
+						.entrySet()) {
+					System.out.println("LOOPING");
+					System.out
+							.println(entry.getKey() + ": " + entry.getValue());
+					if (count == row)
+						value = entry.getValue();
+					count++;
+				}
+				return value;
+				// return data.get(keys[row]);
+			} else
+				return null;
+
 		}
 	}
 }
