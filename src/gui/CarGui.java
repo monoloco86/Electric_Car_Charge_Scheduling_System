@@ -48,7 +48,7 @@ public class CarGui extends JFrame implements ActionListener {
 
 		JPanel panel = new JPanel();
 		base.add(panel, BorderLayout.WEST);
-		panel.setLayout(new BorderLayout(0, 5));
+		panel.setLayout(new BorderLayout(0, 2));
 		JPanel pane = new JPanel();
 		pane.setLayout(new BorderLayout(0, 0));
 		pane.add(new JLabel("Message"), BorderLayout.NORTH);
