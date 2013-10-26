@@ -1,13 +1,13 @@
 package agents;
 
+import util.MapUtil;
 import gui.SummaryGui;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 import jade.core.behaviours.CyclicBehaviour;
-import behaviours.AskSlotValues;
+import behaviours.AskSlotPositions;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -16,7 +16,6 @@ import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
 import jade.lang.acl.ACLMessage;
 
-import java.util.Comparator;
 
 public class SummaryAgent extends GuiAgent {
 
@@ -84,7 +83,7 @@ public class SummaryAgent extends GuiAgent {
 						}
 
 						if (map.size() > 1)
-							map = (Map<String, Integer>) sortByValues(map);
+							map = MapUtil.sortByValueLargest(map);
 
 						System.out.println("After sort");
 						for (Map.Entry<String, Integer> entry : map.entrySet()) {
@@ -114,7 +113,7 @@ public class SummaryAgent extends GuiAgent {
 
 	void updateInfo() {
 		map.clear();
-		addBehaviour(new AskSlotValues());
+		addBehaviour(new AskSlotPositions());
 	}
 
 	public void alertGui(Object response) {
@@ -134,21 +133,5 @@ public class SummaryAgent extends GuiAgent {
 			myGui.setVisible(false);
 			myGui.dispose();
 		}
-	}
-
-	public static <K, V extends Comparable<V>> Map<K, V> sortByValues(
-			final Map<K, V> map) {
-		Comparator<K> valueComparator = new Comparator<K>() {
-			public int compare(K k1, K k2) {
-				int compare = map.get(k2).compareTo(map.get(k1));
-				if (compare == 0)
-					return 1;
-				else
-					return compare;
-			}
-		};
-		Map<K, V> sortedByValues = new TreeMap<K, V>(valueComparator);
-		sortedByValues.putAll(map);
-		return sortedByValues;
 	}
 }

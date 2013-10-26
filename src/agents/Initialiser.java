@@ -17,14 +17,14 @@ public class Initialiser extends Agent {
         /*
          * Deploy Sniffer agent.
          */
-         super.addBehaviour(new Initialise("Sniffer","jade.tools.sniffer.Sniffer",new Object[]{ "*"}));
+         //super.addBehaviour(new Initialise("Sniffer","jade.tools.sniffer.Sniffer",new Object[]{ "*"}));
 
         /*
          * Deploy Car agents.
          */
 
         Integer carCounter = new Integer(0);
-        Integer carAmount = new Integer(2);
+        Integer carAmount = new Integer(3);
         for (carCounter = 0; carCounter < carAmount; carCounter++) {
             super.addBehaviour(new Initialise("CarAgent" + carCounter.toString(),
                     "agents.CarAgent", null));

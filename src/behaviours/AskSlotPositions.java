@@ -1,6 +1,5 @@
 package behaviours;
 
-import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -8,7 +7,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 
-public class AskSlotValues extends OneShotBehaviour {
+public class AskSlotPositions extends OneShotBehaviour {
 
 	private static final long serialVersionUID = 7926453073894379747L;
 
@@ -43,6 +42,6 @@ public class AskSlotValues extends OneShotBehaviour {
 			message.removeReceiver(super.myAgent.getAID());
 			super.myAgent.send(message);
 		}
-        //block(1000);
+
 	}
 }

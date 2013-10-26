@@ -30,7 +30,7 @@ public class CarGui extends JFrame implements ActionListener {
 	final static int ALT_SIGNAL = 70;
 
 	private JTextField msg, timeTillUse, timeNeeded;
-	private JLabel slotPos, tillUseFrame, timeNeededFrame;
+	private JLabel slotPos, slotVal, tillUseFrame, timeNeededFrame;
 	private JButton store, update, alt, cancel, quit;
 
 	private CarAgent myAgent;
@@ -60,8 +60,10 @@ public class CarGui extends JFrame implements ActionListener {
 
 		JPanel p = new JPanel();
 		p.setLayout(new BorderLayout(0, 0));
-		p.add(slotPos = new JLabel("Slot value: " + slotValue),
+		p.add(slotVal = new JLabel("Slot value: " + slotValue),
 				BorderLayout.NORTH);
+        p.add(slotPos = new JLabel("Slot position: "),
+                BorderLayout.NORTH);
 		p.add(tillUseFrame = new JLabel("Time till use: " + 0),
 				BorderLayout.CENTER);
 		p.add(timeNeededFrame = new JLabel("Time needed to charge: " + 0),
@@ -180,8 +182,12 @@ public class CarGui extends JFrame implements ActionListener {
 	}
 
 	public void alertSlot(String s) {
-		slotPos.setText("Slot value: " + s.toString());
+		slotVal.setText("Slot value: " + s.toString());
 	}
+	
+    public void alertPos(String s) {
+        slotPos.setText("Slot position: " + s.toString());
+    }
 
 	public void alertNeeded(String s) {
 		timeNeededFrame.setText("Time needed to charge: " + s.toString());

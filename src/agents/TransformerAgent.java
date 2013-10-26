@@ -1,16 +1,16 @@
 package agents;
 
-import java.util.Comparator;
+import util.MapUtil;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
-import java.util.TreeMap;
 
 import gui.TransformerGui;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
-import behaviours.AskSlotValues;
+import behaviours.AskSlotPositions;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -94,7 +94,7 @@ public class TransformerAgent extends GuiAgent {
 								slotInt);
 
 						if (map.size() > 1)
-							map = (Map<String, Integer>) sortByValues(map);
+							map = MapUtil.sortByValueLargest(map);
 
 						if ((energyPerCar + currentEnergy) > energyLimit
 								&& map.size() > 0) {
@@ -205,7 +205,7 @@ public class TransformerAgent extends GuiAgent {
 
 	void sendInfo() {
 		map.clear();
-		addBehaviour(new AskSlotValues());
+		addBehaviour(new AskSlotPositions());
 	}
 
 	void randCharge() {
@@ -242,21 +242,5 @@ public class TransformerAgent extends GuiAgent {
 			myGui.setVisible(false);
 			myGui.dispose();
 		}
-	}
-
-	public static <K, V extends Comparable<V>> Map<K, V> sortByValues(
-			final Map<K, V> map) {
-		Comparator<K> valueComparator = new Comparator<K>() {
-			public int compare(K k1, K k2) {
-				int compare = map.get(k2).compareTo(map.get(k1));
-				if (compare == 0)
-					return 1;
-				else
-					return compare;
-			}
-		};
-		Map<K, V> sortedByValues = new TreeMap<K, V>(valueComparator);
-		sortedByValues.putAll(map);
-		return sortedByValues;
 	}
 }
