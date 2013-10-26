@@ -13,7 +13,7 @@ public class AskSlotPositions extends OneShotBehaviour {
 
 	@Override
 	public void action() {
-		System.out.println("ASKING FOR SLOT VALUES");
+		System.out.println("ASKING FOR SLOT POSITIONS");
 		setDataStore(super.getDataStore());
 		ServiceDescription serviceDescription = new ServiceDescription();
 		serviceDescription.setType("CarAgent");
@@ -30,7 +30,7 @@ public class AskSlotPositions extends OneShotBehaviour {
 		if (result.length > 0) {
 
 			ACLMessage message = new ACLMessage(ACLMessage.INFORM);
-			message.setContent("what are your slot values");
+			message.setContent("what are your slot positions");
 
 			for (DFAgentDescription agent : result) {
 				message.addReceiver(agent.getName());

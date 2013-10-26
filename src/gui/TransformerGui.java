@@ -183,55 +183,42 @@ public class TransformerGui extends JFrame implements ActionListener {
 
 	private class TableDataModel extends AbstractTableModel {
 
-		private static final long serialVersionUID = -9046466617697329165L;
-		private Map<String, Integer> data;
+        private static final long serialVersionUID = 7015333148116529992L;
 
-		public TableDataModel(Map<String, Integer> tmap) {
-			data = tmap;
-		}
+        private Map<String, Integer> data;
+        private String[] keys;
 
-		@Override
-		public String getColumnName(int col) {
-			if (col == 0) {
-				return "Agent";
-			} else {
-				return "Value";
-			}
-		}
+        public TableDataModel(Map<String, Integer> map) {
+            data = map;
+            keys = data.keySet().toArray(new String[data.size()]);
+        }
 
-		@Override
-		public int getColumnCount() {
-			return 2;
-		}
+        @Override
+        public String getColumnName(int col) {
+            if (col == 0) {
+                return "Agent";
+            } else {
+                return "Value";
+            }
+        }
 
-		@Override
-		public int getRowCount() {
-			return data.size();
-		}
+        @Override
+        public int getColumnCount() {
+            return 2;
+        }
 
-		@Override
-		public Object getValueAt(int row, int col) {
-			if (col == 0) {
-				return "CarAgent" + row;
-			} else if (col == 1) {
-				Integer value = new Integer(0);
-				int count = 0;
-				System.out.println("Inside getValues");
-				for (Map.Entry<String, Integer> entry : ((Map<String, Integer>) data)
-						.entrySet()) {
-					System.out.println("LOOPING");
-					System.out
-							.println(entry.getKey() + ": " + entry.getValue());
-					if (count == row)
-						value = entry.getValue();
-					count++;
-				}
-				return value;
-				// return data.get(keys[row]);
-			} else
-				return null;
+        @Override
+        public int getRowCount() {
+            return data.size();
+        }
 
-		}
-
-	}
+        @Override
+        public Object getValueAt(int row, int col) {
+            if (col == 0) {
+                return keys[row];
+            } else {
+                return data.get(keys[row]);
+            }
+        }
+    }
 }

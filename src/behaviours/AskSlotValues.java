@@ -1,6 +1,6 @@
 package behaviours;
 
-import jade.core.behaviours.CyclicBehaviour;
+//import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;

@@ -277,13 +277,6 @@ public class CarAgent extends GuiAgent {
                             map.put(getLocalName().toString(),
                                     (Integer) ds.get("slotValue"));
 
-                            System.out.println("Before sort");
-                            for (Map.Entry<String, Integer> entry : map.entrySet()) {
-                                System.out.println("LOOPING");
-                                System.out.println(entry.getKey() + ": "
-                                        + entry.getValue());
-                            }
-
                             if (map.size() > 1)
                                 map = MapUtil.sortByValueLargest(map);
 
@@ -295,18 +288,34 @@ public class CarAgent extends GuiAgent {
                                         + entry.getValue());
                                 if(!entry.getKey().toString().contains(getLocalName().toString())) {
                                     count++;
-                                    System.out.println("getKey does not equal " + getLocalName().toString());
-                                    System.out.println("slotValue: " + ds.get("slotValue"));
                                 }
                                 else{
-                                    ds.put("slotPos", count);
-                                    System.out.println("getKey does equal " + getLocalName().toString());
-                                    System.out.println("slotPos: " + ds.get("slotPos"));                                    
-                                }
-                                    
+                                    ds.put("slotPos", count);                                  
+                                }                                    
                             }
                             System.out.println(getLocalName().toString() + "'s slotPos is " + ds.get("slotPos"));
                             alertGuiPos(ds.get("slotPos").toString());
+                        }
+                        if (msg.getContent().contains(
+                                "what are your slot positions")) {
+                            System.out.println(super.myAgent.getLocalName()
+                                    + ": MESSAGE RECEIVED: " + msg.getContent()
+                                    + " ---- From: "
+                                    + msg.getSender().getLocalName());
+
+                            ACLMessage reply = msg.createReply();
+                            reply.setPerformative(ACLMessage.INFORM);
+                            if (ds.get("slotPos") != null) {
+                                reply.setContent("my slot position is "
+                                        + ds.get("slotPos").toString());
+                                System.out.println(getLocalName()
+                                        + ": my slot position is " + ds.get("slotPos").toString());
+                            } else {
+                                reply.setContent("slotPos not set");
+                                System.out.println(getLocalName()
+                                        + ": slotPos not set");
+                            }
+                            super.myAgent.send(reply);
                         }
                     }
                 } else

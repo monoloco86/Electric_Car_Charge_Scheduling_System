@@ -67,11 +67,11 @@ public class SummaryAgent extends GuiAgent {
 					System.out.println(getLocalName() + " recieved: \""
 							+ msg.getContent().toString() + "\" - from "
 							+ msg.getSender().getLocalName());
-					if (msg.getContent().contains("my slot value is")) {
+					if (msg.getContent().contains("my slot position is")) {
 						slotInt = Integer.parseInt(msg.getContent().substring(
 								msg.getContent().lastIndexOf(" ") + 1));
 						System.out.println(msg.getSender().getLocalName()
-								+ " has a slot value of " + slotInt);
+								+ " has a slot position of " + slotInt);
 						map.put(msg.getSender().getLocalName().toString(),
 								slotInt);
 
@@ -83,7 +83,7 @@ public class SummaryAgent extends GuiAgent {
 						}
 
 						if (map.size() > 1)
-							map = MapUtil.sortByValueLargest(map);
+							map = MapUtil.sortByValueSmallest(map);
 
 						System.out.println("After sort");
 						for (Map.Entry<String, Integer> entry : map.entrySet()) {

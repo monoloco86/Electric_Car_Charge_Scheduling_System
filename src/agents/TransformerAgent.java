@@ -80,7 +80,7 @@ public class TransformerAgent extends GuiAgent {
 					System.out.println(getLocalName() + " recieved: \""
 							+ msg.getContent().toString() + "\" - from "
 							+ msg.getSender().getLocalName());
-					if (msg.getContent().contains("my slot value is")) {
+					if (msg.getContent().contains("my slot position is")) {
 						System.out.println(super.myAgent.getLocalName()
 								+ ": MESSAGE RECEIVED: " + msg.getContent()
 								+ " ---- From: "
@@ -94,7 +94,7 @@ public class TransformerAgent extends GuiAgent {
 								slotInt);
 
 						if (map.size() > 1)
-							map = MapUtil.sortByValueLargest(map);
+							map = MapUtil.sortByValueSmallest(map);
 
 						if ((energyPerCar + currentEnergy) > energyLimit
 								&& map.size() > 0) {
@@ -150,7 +150,7 @@ public class TransformerAgent extends GuiAgent {
 								myGui.alertCurrent(currentEnergy);
 								System.out.println(msg.getSender()
 										.getLocalName()
-										+ " has a slot value of " + slotInt);
+										+ " has a slot position of " + slotInt);
 								for (Map.Entry<String, Integer> entry : map
 										.entrySet()) {
 									System.out.println("LOOPING");
