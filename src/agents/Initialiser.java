@@ -24,7 +24,7 @@ public class Initialiser extends Agent {
          */
 
         Integer carCounter = new Integer(0);
-        Integer carAmount = new Integer(4);
+        Integer carAmount = new Integer(2);
         for (carCounter = 0; carCounter < carAmount; carCounter++) {
             super.addBehaviour(new Initialise("CarAgent" + carCounter.toString(),
                     "agents.CarAgent", null));
