@@ -59,15 +59,11 @@ public class CarGui extends JFrame implements ActionListener {
 		panel.add(pane, BorderLayout.NORTH);
 
 		JPanel p = new JPanel();
-		p.setLayout(new BorderLayout(0, 0));
-		p.add(slotVal = new JLabel("Slot value: " + slotValue),
-				BorderLayout.NORTH);
-        p.add(slotPos = new JLabel("Slot position: "),
-                BorderLayout.NORTH);
-		p.add(tillUseFrame = new JLabel("Time till use: " + 0),
-				BorderLayout.CENTER);
-		p.add(timeNeededFrame = new JLabel("Time needed to charge: " + 0),
-				BorderLayout.SOUTH);
+		p.setLayout(new GridLayout(10, 1));
+        p.add(slotPos = new JLabel("Slot position: "));
+		p.add(slotVal = new JLabel("Slot value: " + slotValue));
+		p.add(tillUseFrame = new JLabel("Time till use: " + 0));
+		p.add(timeNeededFrame = new JLabel("Time needed to charge: " + 0));
 
 		panel.add(p, BorderLayout.CENTER);
 
