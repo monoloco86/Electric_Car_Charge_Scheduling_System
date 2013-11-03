@@ -35,7 +35,7 @@ public class TransformerGui extends JFrame implements ActionListener {
 	final static int RAND_SIGNAL = 72;
 	private JTextField msg;
 	private JLabel energyLimit, currentEnergy;
-	private JButton update, rand, cancel, quit;
+	private JButton update, rand, quit;
 	private JTable slotOrder;
 
 	private Map<String, Integer> map = new HashMap<String, Integer>();
@@ -97,10 +97,6 @@ public class TransformerGui extends JFrame implements ActionListener {
 		pane.add(rand = new JButton("Random Charge"));
 		rand.setToolTipText("Submit operation");
 		rand.addActionListener(this);
-		pane.add(cancel = new JButton("Cancel"));
-		cancel.setToolTipText("Submit operation");
-		cancel.setEnabled(false);
-		cancel.addActionListener(this);
 		pane.add(quit = new JButton("QUIT"));
 		quit.setToolTipText("Stop agent and exit");
 		quit.addActionListener(this);
@@ -198,7 +194,7 @@ public class TransformerGui extends JFrame implements ActionListener {
             if (col == 0) {
                 return "Agent";
             } else {
-                return "Value";
+                return "Position";
             }
         }
 

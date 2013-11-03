@@ -31,7 +31,7 @@ public class CarGui extends JFrame implements ActionListener {
 
 	private JTextField msg, timeTillUse, timeNeeded;
 	private JLabel slotPos, slotVal, tillUseFrame, timeNeededFrame;
-	private JButton store, update, alt, cancel, quit;
+	private JButton store, update, alt, quit;
 
 	private CarAgent myAgent;
 
@@ -97,10 +97,6 @@ public class CarGui extends JFrame implements ActionListener {
 		pane.add(alt = new JButton("Toggle Algorithm"));
 		alt.setToolTipText("Submit operation");
 		alt.addActionListener(this);
-		pane.add(cancel = new JButton("Cancel"));
-		cancel.setToolTipText("Submit operation");
-		cancel.setEnabled(false);
-		cancel.addActionListener(this);
 		pane.add(quit = new JButton("QUIT"));
 		quit.setToolTipText("Stop agent and exit");
 		quit.addActionListener(this);
@@ -145,9 +141,6 @@ public class CarGui extends JFrame implements ActionListener {
 		} else if (ae.getSource() == update) {
 			GuiEvent ge = new GuiEvent(this, UPDATE_SIGNAL);
 			myAgent.postGuiEvent(ge);
-		} else if (ae.getSource() == cancel) {
-			cancel.setEnabled(false);
-			msg.setText("Operation canceled!");
 		} else if (ae.getSource() == alt) {
 			GuiEvent ge = new GuiEvent(this, ALT_SIGNAL);
 			myAgent.postGuiEvent(ge);
