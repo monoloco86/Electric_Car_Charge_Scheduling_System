@@ -22,6 +22,7 @@ import agents.Initialiser;
 
 public class InitialiserGui extends JFrame implements ActionListener {
 
+    //initialise variables
     private static final long serialVersionUID = 3336627106461024376L;
     
     final static int EXIT_SIGNAL = 0;
@@ -34,6 +35,7 @@ public class InitialiserGui extends JFrame implements ActionListener {
 	private Initialiser myAgent;
 	Integer amount = new Integer(0);
 
+    //create the initial gui look
 	public InitialiserGui(Initialiser init, Integer amount) {
 
 		myAgent = init;
@@ -86,7 +88,7 @@ public class InitialiserGui extends JFrame implements ActionListener {
 
 	}
 
-	@Override
+    //provide functionality to gui events
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource() == quit) {
 			shutDown();
@@ -97,6 +99,7 @@ public class InitialiserGui extends JFrame implements ActionListener {
 		} 
 	}
 
+    //updates message string
 	void alertInfo(String s) {
 		// --------------------------
 
@@ -113,6 +116,7 @@ public class InitialiserGui extends JFrame implements ActionListener {
         this.amount = Integer.parseInt(response);
     }
 
+    //shutdown gui
 	void shutDown() {
 		int rep = JOptionPane.showConfirmDialog(this,
 				"Are you sure you want to exit?", myAgent.getLocalName(),

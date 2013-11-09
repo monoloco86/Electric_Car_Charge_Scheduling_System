@@ -22,6 +22,7 @@ import agents.CarAgent;
 
 public class CarGui extends JFrame implements ActionListener {
 
+    //initialise variables
 	private static final long serialVersionUID = 434802339658676247L;
 
 	final static int EXIT_SIGNAL = 0;
@@ -35,6 +36,7 @@ public class CarGui extends JFrame implements ActionListener {
 
 	private CarAgent myAgent;
 
+    //create the initial gui look
 	public CarGui(CarAgent car, Integer slotValue) {
 
 		myAgent = car;
@@ -112,7 +114,7 @@ public class CarGui extends JFrame implements ActionListener {
 
 	}
 
-	@Override
+	//provide functionality to gui events
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource() == quit) {
 			shutDown();
@@ -147,6 +149,7 @@ public class CarGui extends JFrame implements ActionListener {
 		}
 	}
 
+	//change message string
 	void alertInfo(String s) {
 		// --------------------------
 
@@ -154,6 +157,7 @@ public class CarGui extends JFrame implements ActionListener {
 		msg.setText(s);
 	}
 
+	//shutdown gui
 	void shutDown() {
 		// ----------------- Control the closing of this gui
 
@@ -166,22 +170,27 @@ public class CarGui extends JFrame implements ActionListener {
 		}
 	}
 
+	//update message string
 	public void alertResponse(String s) {
 		msg.setText(s.toString());
 	}
 
+	//update slot value string
 	public void alertSlot(String s) {
 		slotVal.setText("Slot value: " + s.toString());
 	}
 	
+    //update slot position string	
     public void alertPos(String s) {
         slotPos.setText("Slot position: " + s.toString());
     }
 
+    //update slot time needed string
 	public void alertNeeded(String s) {
 		timeNeededFrame.setText("Time needed to charge: " + s.toString());
 	}
 
+	//update slot time till use string
 	public void alertUse(String s) {
 		tillUseFrame.setText("Time till use: " + s.toString());
 	}

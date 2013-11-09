@@ -24,6 +24,7 @@ import jade.lang.acl.ACLMessage;
 
 public class CarAgent extends GuiAgent {
 
+    //initialise variables
 	private static final long serialVersionUID = -2481137036537418853L;
 
 	transient protected CarGui myGui;
@@ -65,20 +66,22 @@ public class CarAgent extends GuiAgent {
 
 		setQueueSize(0);
 
+	    //initialise variables
 		Integer slotValue = new Integer(0);
 		Integer slotPos = new Integer(999999);
 		Integer timeNeeded = new Integer(999999);
 		Integer timeTillUse = new Integer(999999);
 
+	    //store variables inside a datastore
 		ds.put("slotValue", slotValue);
 		ds.put("slotPos", slotPos);
 		ds.put("timeNeeded", timeNeeded);
 		ds.put("timeTillUse", timeTillUse);
 
+		//set data store and add behaviours
 		carSuperBehaviour.setDataStore(ds);
 		super.addBehaviour(carSuperBehaviour);
 
-		// carSuperBehaviour.addSubBehaviour(new AskSlotValues());
 		carSuperBehaviour.addSubBehaviour(new CyclicBehaviour(this) {
 
 			private static final long serialVersionUID = 908550917934326392L;
@@ -86,6 +89,7 @@ public class CarAgent extends GuiAgent {
 			@Override
 			public void action() {
 
+			    //if started charging start charging
 				if (startFlag) {
 					Integer newTimeNeeded = Integer.parseInt(ds.get(
 							"timeNeeded").toString()) - 1;
@@ -93,6 +97,7 @@ public class CarAgent extends GuiAgent {
 							"timeTillUse").toString()) - 1;
 					ds.put("timeNeeded", newTimeNeeded);
 					ds.put("timeTillUse", newTimeTillUse);
+					//if finished charging ask to be removed
 					if ((newTimeNeeded == 0) || (newTimeTillUse == 0)) {
 						ds.put("timeNeeded", 0);
 						ds.put("timeTillUse", 0);
@@ -121,6 +126,7 @@ public class CarAgent extends GuiAgent {
 							super.myAgent.send(message);
 						}
 					}
+					//update gui
 					System.out.println("CHARGING");
 					alertTimeNeeded(newTimeNeeded.toString());
 					alertTimeTillUse(newTimeTillUse.toString());
@@ -129,7 +135,7 @@ public class CarAgent extends GuiAgent {
 			}
 		});
 
-		// Instanciate the gui
+		// Instantiate the gui
 		myGui = new CarGui(this, (Integer) this.ds.get("slotValue"));
 		myGui.setVisible(true);
 
@@ -138,6 +144,7 @@ public class CarAgent extends GuiAgent {
 			private static final long serialVersionUID = -5221452177252946977L;
 
 			public void action() {
+			    //if message recieve perform actions
 				ACLMessage msg = receive();
 				if (msg != null) {
 					if (msg.getContent() != null) {
@@ -146,6 +153,7 @@ public class CarAgent extends GuiAgent {
 								+ msg.getContent().toString() + "\" - from "
 								+ msg.getSender().getLocalName());
 
+						//if message is change algorithm switch algorithm
 						if (msg.getContent().contains("change algorithm")) {
 							altFlag = !altFlag;
 						}
@@ -157,7 +165,7 @@ public class CarAgent extends GuiAgent {
 							carSuperBehaviour.addSubBehaviour(new AskSlotValues());
 						}
 
-						// ALGORITHM 1
+						// run through algorithm one and alert the gui
 						if (msg.getContent().contains("i need to charge")
 								&& !altFlag) {
 							System.out
@@ -199,7 +207,7 @@ public class CarAgent extends GuiAgent {
 							alertGuiSlot(ds.get("slotValue").toString());
 						}
 
-						// ALGORITHM 2
+                        // run through algorithm two and alert the gui
 						if (msg.getContent().contains("i need to charge")
 								&& altFlag) {
 							System.out
@@ -241,16 +249,19 @@ public class CarAgent extends GuiAgent {
 							alertGuiSlot(ds.get("slotValue").toString());
 						}
 
+						//if asked to charge start charging
 						if (msg.getContent().contains("you are charging")) {
 							startFlag = true;
 							System.out.println(getLocalName() + " is charging");
 						}
+                        //if asked to stop charging stop charging
 						if (msg.getContent().contains(
 								"sorry you will have to wait")) {
 							System.out.println("not enough charge for "
 									+ getLocalName());
 							startFlag = false;
 						}
+                        //if asked for values return them
 						if (msg.getContent().contains(
 								"what are your slot values")) {
 							System.out.println(super.myAgent.getLocalName()
@@ -274,6 +285,7 @@ public class CarAgent extends GuiAgent {
 							}
 							super.myAgent.send(reply);
 						}
+                        //if told values store them into a map an sort them. After sorted update slot position and update gui
 						if (msg.getContent().contains("my slot value is")) {
 							Integer slotInt = Integer
 									.parseInt(msg
@@ -311,6 +323,7 @@ public class CarAgent extends GuiAgent {
 							alertGuiPos(ds.get("slotPos").toString());
 							addBehaviour(new AskSlotPositions());
 						}
+						//Make sure the positions are not the same as any other car agent
 						if (msg.getContent().contains("my slot position is ")) {
 						    Integer otherSlotPos = Integer.parseInt(msg.getContent().substring(msg.getContent().lastIndexOf(" ") + 1));
 						    if(otherSlotPos == ds.get("slotPos")){
@@ -318,6 +331,7 @@ public class CarAgent extends GuiAgent {
 						        addBehaviour(new InformWorld(ds.get("timeNeeded"),ds.get("timeTillUse")));
 						        }
 						}
+						//if asked for positions return them
 						if (msg.getContent().contains("what are your slot positions")) {
 							System.out.println(super.myAgent.getLocalName()
 									+ ": MESSAGE RECEIVED: " + msg.getContent()
@@ -346,6 +360,7 @@ public class CarAgent extends GuiAgent {
 		});
 	}
 
+	//setting up gui functionality
 	protected void onGuiEvent(GuiEvent ge) {
 		command = ge.getType();
 		if (command == EXIT_SIGNAL) {
@@ -375,32 +390,39 @@ public class CarAgent extends GuiAgent {
 		}
 	}
 
+	//toggle algorithms
 	void changeAlgorithms() {
 		addBehaviour(new ChangeAlgorithm());
 	}
 
+	//send information to the other car agents 
 	void sendInfo() {
 		addBehaviour(new InformWorld(ds.get("timeNeeded"),
 				ds.get("timeTillUse")));
 		carSuperBehaviour.addSubBehaviour(new AskSlotValues());
 	}
 
+    //send information to the GUI 
 	public void alertGui(String response) {
 		myGui.alertResponse(response);
 	}
 
+    //send slot value to the GUI 
 	public void alertGuiSlot(String response) {
 		myGui.alertSlot(response);
 	}
 
+    //send slot position to the GUI 
 	public void alertGuiPos(String response) {
 		myGui.alertPos(response);
 	}
 
+    //send Time Needed to the GUI 
 	public void alertTimeNeeded(String response) {
 		myGui.alertNeeded(response);
 	}
 
+    //send Time Till Use to the GUI 
 	public void alertTimeTillUse(String response) {
 		myGui.alertUse(response);
 	}

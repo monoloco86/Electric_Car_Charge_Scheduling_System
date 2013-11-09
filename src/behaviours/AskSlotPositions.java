@@ -14,6 +14,8 @@ public class AskSlotPositions extends OneShotBehaviour {
 	@Override
 	public void action() {
 		System.out.println("ASKING FOR SLOT POSITIONS");
+
+        //Find all car agents
 		setDataStore(super.getDataStore());
 		ServiceDescription serviceDescription = new ServiceDescription();
 		serviceDescription.setType("CarAgent");
@@ -27,6 +29,7 @@ public class AskSlotPositions extends OneShotBehaviour {
 			e.printStackTrace();
 		}
 
+        //Send a message to all car agents but itself 
 		if (result.length > 0) {
 
 			ACLMessage message = new ACLMessage(ACLMessage.INFORM);

@@ -1,6 +1,6 @@
 /*
  * @Author Christopher Marra, Carter Page
- * This class is a modified version of the free to use class
+ * This class is a modified version of the free to use class which sorts a map array
  * from http://stackoverflow.com/questions/109383/how-to-sort-a-mapkey-value-on-the-values-in-java
  */
 

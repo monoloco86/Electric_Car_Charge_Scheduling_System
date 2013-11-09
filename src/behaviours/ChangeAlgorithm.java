@@ -13,7 +13,8 @@ public class ChangeAlgorithm extends OneShotBehaviour {
             
     @Override
     public void action() {
-    	
+
+        //Find all car agents
         ServiceDescription serviceDescription = new ServiceDescription();
         serviceDescription.setType("CarAgent");
         DFAgentDescription agentDescription = new DFAgentDescription();
@@ -25,7 +26,8 @@ public class ChangeAlgorithm extends OneShotBehaviour {
         } catch (FIPAException e) {
             e.printStackTrace();
         }
-        
+
+        //Send a message to all car agents but itself 
         if (result.length > 0) {
         	       	    	
             ACLMessage message = new ACLMessage(ACLMessage.INFORM);

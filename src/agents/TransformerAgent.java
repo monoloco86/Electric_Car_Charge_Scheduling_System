@@ -22,6 +22,7 @@ import jade.lang.acl.ACLMessage;
 
 public class TransformerAgent extends GuiAgent {
 
+    //initialise variables
     private static final long serialVersionUID = 797974564683033413L;
 
     transient protected TransformerGui myGui;
@@ -66,7 +67,7 @@ public class TransformerAgent extends GuiAgent {
 
         setQueueSize(0);
 
-        // Instanciate the gui
+        // Instantiate the gui
         myGui = new TransformerGui(this, energyLimit);
         myGui.setVisible(true);
 
@@ -78,6 +79,7 @@ public class TransformerAgent extends GuiAgent {
 
                 ACLMessage msg = receive();
                 if (msg != null) {
+                    //figure out which cars to be charged or not and send a response
                     boolean inMap = false;
                     System.out.println(getLocalName() + " recieved: \""
                             + msg.getContent().toString() + "\" - from "
@@ -117,6 +119,7 @@ public class TransformerAgent extends GuiAgent {
                             if (keyString == reply.getSender().getLocalName())
                                 reply.setContent("sorry you will have to wait");
                             else {
+                                //ask car to charge
                                 reply.setContent("you are charging");
                                 ServiceDescription serviceDescription = new ServiceDescription();
                                 serviceDescription.setType("CarAgent");
@@ -132,6 +135,7 @@ public class TransformerAgent extends GuiAgent {
                                     e.printStackTrace();
                                 }
 
+                                //ask car to wait
                                 if (result.length > 0) {
 
                                     ACLMessage removeMessage = new ACLMessage(
@@ -149,6 +153,7 @@ public class TransformerAgent extends GuiAgent {
 
                         } else {
                             if (!inMap) {
+                                //ask car to charge
                                 currentEnergy += energyPerCar;
                                 reply.setContent("you are charging");
                                 myGui.alertCurrent(currentEnergy);
@@ -164,6 +169,7 @@ public class TransformerAgent extends GuiAgent {
                         alertGui(map);
                         super.myAgent.send(reply);
                     }
+                    //remove car from queue
                     if (msg.getContent().contains("you can remove me")) {
                         System.out.println(msg.getSender().getLocalName()
                                 .toString()
@@ -192,6 +198,7 @@ public class TransformerAgent extends GuiAgent {
         });
     }
 
+    //provide gui functionality
     protected void onGuiEvent(GuiEvent ge) {
         command = ge.getType();
         if (command == EXIT_SIGNAL) {
@@ -207,11 +214,13 @@ public class TransformerAgent extends GuiAgent {
         }
     }
 
+    //ask cars for information
     void sendInfo() {
         map.clear();
         addBehaviour(new AskSlotPositions());
     }
 
+    //randomise charge limit
     void randCharge() {
         energyLimit = random.nextInt(2000);
         while (energyLimit < currentEnergy)
@@ -221,14 +230,17 @@ public class TransformerAgent extends GuiAgent {
         myGui.alertLimit(energyLimit);
     }
 
+    //send map to the gui     
     public void alertGui(Object response) {
         myGui.alertResponse(response);
     }
 
+    //send limit to the gui
     public void alertGuiLimit(Integer response) {
         myGui.alertLimit(response);
     }
 
+    //send current energy used tothe gui 
     public void alertGuiCurrent(Integer response) {
         myGui.alertCurrent(response);
     }

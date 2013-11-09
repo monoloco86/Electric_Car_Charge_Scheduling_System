@@ -28,6 +28,7 @@ import agents.SummaryAgent;
 
 public class SummaryGui extends JFrame implements ActionListener {
 
+    //initialise variables
 	private static final long serialVersionUID = -4294488323535790208L;
 
 	final static int EXIT_SIGNAL = 0;
@@ -41,6 +42,7 @@ public class SummaryGui extends JFrame implements ActionListener {
 	private Map<String, Integer> map = new HashMap<String, Integer>();
 	private SummaryAgent myAgent;
 
+    //create the initial gui look
 	public SummaryGui(SummaryAgent summary) {
 
 		myAgent = summary;
@@ -99,7 +101,7 @@ public class SummaryGui extends JFrame implements ActionListener {
 
 	}
 
-	@Override
+    //provide functionality to gui events
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource() == quit) {
 			shutDown();
@@ -114,6 +116,7 @@ public class SummaryGui extends JFrame implements ActionListener {
 		}
 	}
 
+	//updates message string
 	void alertInfo(String s) {
 		// --------------------------
 
@@ -121,6 +124,7 @@ public class SummaryGui extends JFrame implements ActionListener {
 		msg.setText(s);
 	}
 
+    //shutdown gui
 	void shutDown() {
 		// ----------------- Control the closing of this gui
 
@@ -135,8 +139,10 @@ public class SummaryGui extends JFrame implements ActionListener {
 
 	@SuppressWarnings("unchecked")
 	public void alertResponse(Object o) {
+        //update message string
 		if (o instanceof String)
 			msg.setText((String) o);
+        //update JTable 
 		else if (o instanceof Map) {
 			System.out.println("Inside GUI");
 			for (Map.Entry<String, Integer> entry : ((Map<String, Integer>) o)
@@ -151,6 +157,7 @@ public class SummaryGui extends JFrame implements ActionListener {
 		}
 	}
 
+	//update table model
 	private class TableDataModel extends AbstractTableModel {
 
 		private static final long serialVersionUID = 7015333148116529992L;

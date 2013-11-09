@@ -20,6 +20,7 @@ import jade.lang.acl.ACLMessage;
 
 public class SummaryAgent extends GuiAgent {
 
+    //initialise variables
     private static final long serialVersionUID = -37780069230983858L;
 
     transient protected SummaryGui myGui;
@@ -55,7 +56,7 @@ public class SummaryAgent extends GuiAgent {
 
         setQueueSize(0);
 
-        // Instanciate the gui
+        // Instantiate the gui
         myGui = new SummaryGui(this);
         myGui.setVisible(true);
 
@@ -64,6 +65,7 @@ public class SummaryAgent extends GuiAgent {
             private static final long serialVersionUID = 1274196283439389278L;
 
             public void action() {
+                //slot positions received store into a map and sort it
                 ACLMessage msg = receive();
                 if (msg != null) {
                     System.out.println(getLocalName() + " recieved: \""
@@ -101,6 +103,7 @@ public class SummaryAgent extends GuiAgent {
         });
     }
 
+    //providing functions for gui events
     protected void onGuiEvent(GuiEvent ge) {
         command = ge.getType();
         if (command == EXIT_SIGNAL) {
@@ -116,19 +119,23 @@ public class SummaryAgent extends GuiAgent {
         }
     }
 
+    //updates the information map
     void updateInfo() {
         map.clear();
         addBehaviour(new AskSlotPositions());
     }
 
+    //asks cars to randomise there data
     void randomInfo() {
         addBehaviour(new RandomValues());
     }
 
+    //sends the map to the gui
     public void alertGui(Object response) {
         myGui.alertResponse(response);
     }
 
+    //closes the gui 
     protected void takeDown() {
         /*
          * Deregister this agent with DF.
