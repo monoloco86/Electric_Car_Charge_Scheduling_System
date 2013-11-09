@@ -40,7 +40,7 @@ public class Initialiser extends GuiAgent {
          */
 
         // Create initial car agents
-        Integer carAmount = new Integer(3);
+        Integer carAmount = new Integer(4);
         for (carCounter = 0; carCounter < carAmount; carCounter++) {
             super.addBehaviour(new Initialise("CarAgent" + carCounter.toString(),
                     "agents.CarAgent", null));
