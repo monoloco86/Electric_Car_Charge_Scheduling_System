@@ -3,12 +3,13 @@ package agents;
 
 import gui.InitialiserGui;
 import behaviours.Initialise;
+import behaviours.RemoveCar;
 import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
 
 public class Initialiser extends GuiAgent {
 
-    //initialise variables
+    // initialise variables
     private static final long serialVersionUID = 8349492506914849055L;
 
     transient protected InitialiserGui myGui;
@@ -16,6 +17,7 @@ public class Initialiser extends GuiAgent {
     static final int WAIT = -1;
     final static int EXIT_SIGNAL = 0;
     final static int ADD_SIGNAL = 69;
+    final static int REMOVE_SIGNAL = 59;
 
     Integer carCounter = new Integer(0);
     private int command = WAIT;
@@ -29,20 +31,22 @@ public class Initialiser extends GuiAgent {
         /*
          * Deploy Sniffer agent. uncomment to add the sniffer
          */
-        // super.addBehaviour(new Initialise("Sniffer","jade.tools.sniffer.Sniffer",new Object[]{"*"}));
+        // super.addBehaviour(new
+        // Initialise("Sniffer","jade.tools.sniffer.Sniffer",new
+        // Object[]{"*"}));
 
         /*
          * Deploy Car agents.
          */
 
-        //Create initial car agents
+        // Create initial car agents
         Integer carAmount = new Integer(3);
         for (carCounter = 0; carCounter < carAmount; carCounter++) {
             super.addBehaviour(new Initialise("CarAgent" + carCounter.toString(),
                     "agents.CarAgent", null));
         }
 
-        //create and show initialiser GUI
+        // create and show initialiser GUI
         myGui = new InitialiserGui(this, carCounter);
         myGui.setVisible(true);
 
@@ -50,7 +54,7 @@ public class Initialiser extends GuiAgent {
          * Deploy Summary agents.
          */
 
-        //Create initial summary agents
+        // Create initial summary agents
         Integer summaryCounter = new Integer(0);
         Integer summaryAmount = new Integer(1);
         for (summaryCounter = 0; summaryCounter < summaryAmount; summaryCounter++) {
@@ -62,7 +66,7 @@ public class Initialiser extends GuiAgent {
          * Deploy Transformer agents.
          */
 
-        //Create initial transformer agents
+        // Create initial transformer agents
         Integer transformerCounter = new Integer(0);
         Integer transformerAmount = new Integer(1);
         for (transformerCounter = 0; transformerCounter < transformerAmount; transformerCounter++) {
@@ -71,7 +75,7 @@ public class Initialiser extends GuiAgent {
         }
     }
 
-    //Provide functions for gui events
+    // Provide functions for gui events
     protected void onGuiEvent(GuiEvent ge) {
         command = ge.getType();
         if (command == EXIT_SIGNAL) {
@@ -86,15 +90,31 @@ public class Initialiser extends GuiAgent {
             carCounter++;
             alertGui("Car added");
             alertGuiCount(carCounter.toString());
+        } else if (command == REMOVE_SIGNAL) {
+            removeCar();
         }
     }
 
-    //Send information to the gui
+    // Remove latest car agent
+    public void removeCar() {
+        if (carCounter > 0) {
+            System.out.println("REMOVING CAR AGENT");
+            alertGui("Removing car agent");
+            addBehaviour(new RemoveCar(carCounter));
+            carCounter--;
+            alertGui("Car removed");
+            alertGuiCount(carCounter.toString());
+        }
+        else
+            alertGui("No cars to remove");            
+    }
+
+    // Send information to the gui
     public void alertGui(String response) {
         myGui.alertResponse(response);
     }
 
-    //Send the amount of cars to the gui
+    // Send the amount of cars to the gui
     public void alertGuiCount(String response) {
         myGui.alertCount(response);
     }

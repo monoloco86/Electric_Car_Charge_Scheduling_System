@@ -353,6 +353,14 @@ public class CarAgent extends GuiAgent {
 							}
 							super.myAgent.send(reply);
 						}
+                        //if asked to remove itself do it
+                        if (msg.getContent().contains("remove yourself")) {
+                            System.out.println(super.myAgent.getLocalName()
+                                    + ": MESSAGE RECEIVED: " + msg.getContent()
+                                    + " ---- From: "
+                                    + msg.getSender().getLocalName());
+                            takeDown();
+                        }
 					}
 				} else
 					block();

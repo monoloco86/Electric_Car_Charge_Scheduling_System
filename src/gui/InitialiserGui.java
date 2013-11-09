@@ -27,9 +27,10 @@ public class InitialiserGui extends JFrame implements ActionListener {
     
     final static int EXIT_SIGNAL = 0;
 	final static int ADD_SIGNAL = 69;
+    final static int REMOVE_SIGNAL = 59;
 	
 	private JTextField msg;
-	private JButton add, quit;
+	private JButton add, remove, quit;
 	private JLabel carAmount;
 
 	private Initialiser myAgent;
@@ -69,10 +70,13 @@ public class InitialiserGui extends JFrame implements ActionListener {
         pane = new JPanel();
         panel.add(pane, BorderLayout.EAST);
         pane.setBorder(new EmptyBorder(0, 20, 130, 0));
-        pane.setLayout(new GridLayout(2, 1, 0, 5));
+        pane.setLayout(new GridLayout(3, 1, 0, 5));
         pane.add(add = new JButton("Add Cars"));
         add.setToolTipText("Added Cars");
         add.addActionListener(this);
+        pane.add(remove = new JButton("Remove Car"));
+        remove.setToolTipText("Remove last car");
+        remove.addActionListener(this);
         pane.add(quit = new JButton("QUIT"));
         quit.setToolTipText("Stop agent and exit");
         quit.addActionListener(this);
@@ -83,7 +87,7 @@ public class InitialiserGui extends JFrame implements ActionListener {
 			}
 		});
 
-        setSize(285, 275);
+        setSize(285, 300);
 		setResizable(false);
 
 	}
@@ -96,7 +100,11 @@ public class InitialiserGui extends JFrame implements ActionListener {
 			alertInfo("Add Car agent");
 			GuiEvent ge = new GuiEvent(this, ADD_SIGNAL);
 			myAgent.postGuiEvent(ge);
-		} 
+		} else if (ae.getSource() == remove) {
+            alertInfo("Remove Car agent");
+            GuiEvent ge = new GuiEvent(this, REMOVE_SIGNAL);
+            myAgent.postGuiEvent(ge);
+        } 
 	}
 
     //updates message string
