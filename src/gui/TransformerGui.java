@@ -171,7 +171,9 @@ public class TransformerGui extends JFrame implements ActionListener {
 				System.out.println("Value 1,1 is " + model.getValueAt(1, 1));
 			}
 			slotOrder.setModel(model);
+            System.out.println("MODEL SET");
 			slotOrder.repaint();
+            System.out.println("MODEL PAINTED");
 		}
 	}
 

@@ -166,6 +166,7 @@ public class TransformerAgent extends GuiAgent {
                                 }
                             }
                         }
+                        System.out.println("UPDATING MAP");
                         alertGui(map);
                         super.myAgent.send(reply);
                     }
@@ -175,22 +176,22 @@ public class TransformerAgent extends GuiAgent {
                                 .toString()
                                 + " wants to be removed");
 
+                        Map<String, Integer> map2 = new HashMap<String, Integer>(map);
                         for (Map.Entry<String, Integer> entry : map.entrySet()) {
                             if (entry.getKey().contains(
                                     msg.getSender().getLocalName().toString())) {
                                 System.out.println("Removing " + entry.getKey());
-                                map.remove(entry.getKey());
+                                map2.remove(entry.getKey());
                                 currentEnergy -= energyPerCar;
                                 myGui.alertCurrent(currentEnergy);
-                                for (Map.Entry<String, Integer> entry2 : map
-                                        .entrySet()) {
-                                    System.out.println("LOOPING");
-                                    System.out.println(entry2.getKey() + ": "
-                                            + entry2.getValue());
-                                }
-                                alertGui(map);
                             }
                         }
+                        map=map2;
+                        alertGui(map);
+                        ACLMessage reply = msg.createReply();
+                        reply.setPerformative(ACLMessage.INFORM);
+                        reply.setContent("you have been removed");
+                        super.myAgent.send(reply);
                     }
                 } else
                     block();

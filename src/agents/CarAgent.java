@@ -13,6 +13,7 @@ import jade.core.behaviours.ParallelBehaviour;
 import behaviours.AskSlotPositions;
 import behaviours.AskSlotValues;
 import behaviours.ChangeAlgorithm;
+import behaviours.InformDeath;
 import behaviours.InformWorld;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -161,8 +162,7 @@ public class CarAgent extends GuiAgent {
 							Random random = new Random();
 							ds.put("timeNeeded", random.nextInt(200));
 							ds.put("timeTillUse", random.nextInt(200));							
-							addBehaviour(new InformWorld(ds.get("timeNeeded"),ds.get("timeTillUse")));
-							carSuperBehaviour.addSubBehaviour(new AskSlotValues());
+							sendInfo();
 						}
 
 						// run through algorithm one and alert the gui
@@ -205,6 +205,8 @@ public class CarAgent extends GuiAgent {
 									+ ds.get("slotValue").toString());
 
 							alertGuiSlot(ds.get("slotValue").toString());
+		                    alertTimeNeeded(ds.get("timeNeeded").toString());
+		                    alertTimeTillUse(ds.get("timeTillUse").toString());							
 						}
 
                         // run through algorithm two and alert the gui
@@ -359,6 +361,14 @@ public class CarAgent extends GuiAgent {
                                     + ": MESSAGE RECEIVED: " + msg.getContent()
                                     + " ---- From: "
                                     + msg.getSender().getLocalName());
+                            takeDown();
+                        }
+                        if (msg.getContent().contains("you have been removed")) {
+                            System.out.println(super.myAgent.getLocalName()
+                                    + ": MESSAGE RECEIVED: " + msg.getContent()
+                                    + " ---- From: "
+                                    + msg.getSender().getLocalName());
+                            addBehaviour(new InformDeath());
                             takeDown();
                         }
 					}

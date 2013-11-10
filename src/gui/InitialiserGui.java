@@ -87,7 +87,7 @@ public class InitialiserGui extends JFrame implements ActionListener {
 			}
 		});
 
-        setSize(285, 300);
+        setSize(300, 300);
 		setResizable(false);
 
 	}

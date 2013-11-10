@@ -4,8 +4,14 @@ package agents;
 import gui.InitialiserGui;
 import behaviours.Initialise;
 import behaviours.RemoveCar;
+import jade.core.behaviours.CyclicBehaviour;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
+import jade.lang.acl.ACLMessage;
 
 public class Initialiser extends GuiAgent {
 
@@ -25,8 +31,23 @@ public class Initialiser extends GuiAgent {
     protected void setup() {
 
         /*
-         * Announce operation of this agent.
+         * Register this agent with DF.
          */
+        ServiceDescription serviceDescription = new ServiceDescription();
+        serviceDescription.setType("Initialiser");
+        serviceDescription.setName(super.getLocalName());
+
+        DFAgentDescription agentDescription = new DFAgentDescription();
+        agentDescription.setName(super.getAID());
+        agentDescription.addServices(serviceDescription);
+
+        try {
+            DFService.register(this, agentDescription);
+        } catch (FIPAException e) {
+            e.printStackTrace();
+        }
+
+        setQueueSize(0);
 
         /*
          * Deploy Sniffer agent. uncomment to add the sniffer
@@ -73,6 +94,24 @@ public class Initialiser extends GuiAgent {
             super.addBehaviour(new Initialise("TransformerAgent" + transformerCounter.toString(),
                     "agents.TransformerAgent", null));
         }
+        super.addBehaviour(new CyclicBehaviour(this) {
+
+            private static final long serialVersionUID = -7532975404825550772L;
+
+            public void action() {
+                ACLMessage msg = receive();
+                if (msg != null) {
+                    System.out.println(getLocalName() + " recieved: \""
+                            + msg.getContent().toString() + "\" - from "
+                            + msg.getSender().getLocalName());
+                    if (msg.getContent().contains("im leaving")) {
+                        carCounter--;
+                        alertGuiCount(carCounter.toString());
+                    }
+                } else
+                    block();
+            }
+        });
     }
 
     // Provide functions for gui events
