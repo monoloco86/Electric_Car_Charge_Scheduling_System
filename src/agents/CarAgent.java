@@ -14,6 +14,7 @@ import behaviours.AskSlotPositions;
 import behaviours.AskSlotValues;
 import behaviours.ChangeAlgorithm;
 import behaviours.InformWorld;
+import behaviours.InformWorldAlt;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -21,6 +22,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
 import jade.lang.acl.ACLMessage;
+
 
 public class CarAgent extends GuiAgent {
 
@@ -219,9 +221,11 @@ public class CarAgent extends GuiAgent {
 									+ msg.getSender().getLocalName());
 							String[] values = msg.getContent()
 									.replaceAll("[\\D]", " ").trim()
-									.replaceAll(" +", " ").split(" ", 2);
+                 					.replaceAll(" +", " ").trim()
+									.replaceAll(" +", " ").split(" ", 3);
 							Integer senderChargeBy = new Integer(values[0]);
 							Integer senderChargeTime = new Integer(values[1]);
+							Integer senderSlotValue = new Integer(values[2]);
 							Integer myChargeBy = Integer.parseInt(ds.get(
 									"timeTillUse").toString());
 							Integer myChargeTime = Integer.parseInt(ds.get(
@@ -240,7 +244,42 @@ public class CarAgent extends GuiAgent {
 								newSlotValue = mySlotValue - 1;
 							else
 								newSlotValue = mySlotValue + 1;
-
+							
+							int highSlotValue;
+							int lowSlotValue = 1000;
+							int slotValueVector = 0;
+							int directedChange = 0;
+							int error = 0;
+							int lowestError = 100;
+							Random randomNum = new Random();
+							int randomChange = randomNum.nextInt(3) - 2;
+							//int iteration = 0;
+							if (newSlotValue < senderSlotValue){
+								highSlotValue = senderSlotValue;
+								if (senderSlotValue < lowSlotValue)
+								lowSlotValue = senderSlotValue;
+								}
+							else{
+								highSlotValue = newSlotValue;
+								if (newSlotValue < lowSlotValue)
+								lowSlotValue = newSlotValue;
+								}
+							//if (iteration < 5){
+							slotValueVector = highSlotValue + randomChange + directedChange;
+							error = errorCalculation(highSlotValue,lowSlotValue);
+							// iteration ++;
+							if (error <= lowestError){
+								highSlotValue = slotValueVector;
+								directedChange = directedChange + 2*slotValueVector;
+								error = errorCalculation(highSlotValue,lowSlotValue);
+								lowestError = error;
+							}else if(error >= lowestError){
+								slotValueVector = highSlotValue - randomChange + directedChange;
+								error = errorCalculation(highSlotValue,lowSlotValue);
+							}
+							newSlotValue = slotValueVector;
+							//}
+							
 							ds.put("slotValue", newSlotValue);
 							System.out.println(super.myAgent.getLocalName()
 									+ " has a slot value of "
@@ -405,11 +444,26 @@ public class CarAgent extends GuiAgent {
 
 	//send information to the other car agents 
 	void sendInfo() {
+		if (altFlag == false){
 		addBehaviour(new InformWorld(ds.get("timeNeeded"),
 				ds.get("timeTillUse")));
 		carSuperBehaviour.addSubBehaviour(new AskSlotValues());
+		}
+		else
+		{
+		addBehaviour(new InformWorldAlt(ds.get("timeNeeded"),
+				ds.get("timeTillUse"),
+				ds.get("slotValue")));
+		carSuperBehaviour.addSubBehaviour(new AskSlotValues());
+		}
 	}
-
+	
+	//calculate the error for use in alternate algorithm
+	Integer errorCalculation(int highSlotValue, int lowSlotValue){
+		Integer error = 0;
+		error = highSlotValue + lowSlotValue;
+		return error;
+	}
     //send information to the GUI 
 	public void alertGui(String response) {
 		myGui.alertResponse(response);
